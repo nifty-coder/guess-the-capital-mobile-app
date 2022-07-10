@@ -10,7 +10,8 @@ function HomeIntroScreen({ navigation }) {
   function playGameHandler() {
     if(
      (playerName.includes('<') && (playerName.includes('/>') || playerName.includes('>'))) 
-    || (playerName.trim() === '')) {
+    || (playerName.trim() === '')
+    ) {
       Alert.alert("Invalid Name Text", "Enter proper name.");
       setPlayerName('');
       return;
