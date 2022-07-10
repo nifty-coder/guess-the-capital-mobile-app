@@ -1,5 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
-import { NavigationContainer } from '@react-navigation/native';
+import { Image, Pressable } from 'react-native';
+import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
@@ -16,6 +17,8 @@ import WinsScreen from './screens/WinsScreen';
 
 const NativeStack = createNativeStackNavigator();
 function GameStackNavigator() {
+  const navigation = useNavigation();
+
   return (
     <NativeStack.Navigator screenOptions={NativeStackNavigationScreenOptions}>
       <NativeStack.Screen 
@@ -28,7 +31,11 @@ function GameStackNavigator() {
       component={HomeGameScreen} 
       options={{
         title: "Game",
-        headerBackImageSource: StopAppIcon
+        headerLeft: () => (
+         <Pressable android_ripple={{ color: '#fff' }} onPress={navigation.goBack}>
+          <Image source={StopAppIcon} style={{ height: 75, width: 80 }} />
+         </Pressable> 
+        )
       }} />
     </NativeStack.Navigator>
   );
