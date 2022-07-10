@@ -1,0 +1,1 @@
+const COUNTRIES_LIST = [];
