@@ -18,6 +18,7 @@ function HomeIntroScreen({ navigation }) {
     }
 
     navigation.navigate("HomeGame", { playerName });
+    setPlayerName('');
   };
 
   return (

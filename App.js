@@ -30,10 +30,10 @@ function GameStackNavigator() {
       name="HomeGame" 
       component={HomeGameScreen} 
       options={{
-        title: "Game",
+        title: "Guess The Capital",
         headerLeft: () => (
          <Pressable android_ripple={{ color: '#fff' }} onPress={navigation.goBack}>
-          <Image source={StopAppIcon} style={{ height: 75, width: 80 }} />
+          <Image source={StopAppIcon} style={{ height: 75, width: 80, marginBottom: 4 }} />
          </Pressable> 
         )
       }} />

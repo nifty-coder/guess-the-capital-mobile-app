@@ -1,8 +1,10 @@
 const Colors = {
   appTheme: {
-    orange: 'orange',
     reddish: '#cd077d',
-    darkgreen: 'darkgreen'
+    orange: 'orange',
+    darkgreen: 'darkgreen',
+    blue: 'blue',
+    darkblue: 'darkblue'
   },
   white: 'white',
   black: 'black'  
