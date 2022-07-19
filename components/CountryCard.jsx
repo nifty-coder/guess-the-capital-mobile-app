@@ -4,39 +4,36 @@ import { commafyNumber } from 'commafy-any-number';
 import { getContinentMap } from '../constants/Data';
 import Colors from '../constants/Colors';
 
-const CountryCard = ({ flag, name, population, continents, seal }) => {
+const CountryCard = ({ wonGame, flag, name, population, continents, seal }) => {
   const continentMapLink = getContinentMap(continents[0]);
   const emblemUri = Object.keys(seal).length !== 0 && seal.png;
   const [preFetchedUri] = useState(emblemUri);
   const [emblemOrMapUri, setEmblemOrMapUri] = useState('https://c.tenor.com/oGoY4h0pGYUAAAAj/updatess.gif');
 
   useEffect(() => { 
+    const valueToSet = !emblemUri ? continentMapLink : preFetchedUri;
     setTimeout(() => {
-      if(!emblemUri) {
-        setEmblemOrMapUri(continentMapLink);
-       } else {
-         setEmblemOrMapUri(preFetchedUri);
-       }
+      setEmblemOrMapUri(valueToSet);
     }, 1000);
   }, []);
 
   return (
     <View style={styles.card}>
-      <Text style={styles.flag}>{flag}</Text>
+     <Text style={styles.flag}>{flag}</Text>
 
      <View style={styles.countryDetails}>
-       <Text style={styles.name}>{name}</Text>
-       <Text>Population: {commafyNumber(population)}</Text>
-       <Text>
-        {continents[0] === "Oceania" ? "Region: " : "Continent: "} 
-        {name === "Russia" ? "Eurasia" : continents[0]}
+      <Text style={styles.name}>{name}</Text>
+      <Text>Population: {commafyNumber(population)}</Text>
+      <Text>
+       {continents[0] === "Oceania" ? "Region: " : "Continent: "} 
+       {name === "Russia" ? "Eurasia" : continents[0]}
       </Text>
      </View>
 
-      <Image 
-      source={{ uri: emblemOrMapUri }} 
-      style={styles.seal} 
-      resizeMode="contain" />  
+     <Image 
+     source={{ uri: emblemOrMapUri }} 
+     style={styles.seal} 
+     resizeMode="contain" />  
     </View>
   );
 };

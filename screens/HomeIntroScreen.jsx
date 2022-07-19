@@ -6,7 +6,7 @@ import CustomButton from '../components/CustomButton';
 
 function HomeIntroScreen({ navigation }) {
   const [playerName, setPlayerName] = useState('');
-
+ 
   function playGameHandler() {
     if(
      (playerName.includes('<') && (playerName.includes('/>') || playerName.includes('>'))) 
@@ -31,7 +31,13 @@ function HomeIntroScreen({ navigation }) {
         value={playerName} 
         onChangeText={(text) => setPlayerName(text)} />
       </View>
-      <CustomButton buttonText="Play Game" onPress={playGameHandler} />
+      <CustomButton 
+      style={{
+        backgroundColor: Colors.black,
+        color: Colors.appTheme.orange
+      }}
+      buttonText="Play Game" 
+      onPress={playGameHandler} />
     </View>
   );
 };

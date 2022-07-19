@@ -19,11 +19,10 @@ const styles = StyleSheet.create({
      borderRadius: 90,
      elevation: 5,
      borderWidth: 1,
-     marginHorizontal: 66,
-     backgroundColor: Colors.black
+     marginHorizontal: 66
     },
     buttonText: {
-        textAlign: 'center',
-        color: Colors.appTheme.orange
+      textAlign: 'center',
+      color: Colors.appTheme.orange
     }
 });
