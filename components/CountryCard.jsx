@@ -8,7 +8,8 @@ const CountryCard = ({ wonGame, flag, name, population, continents, seal }) => {
   const continentMapLink = getContinentMap(continents[0]);
   const emblemUri = Object.keys(seal).length !== 0 && seal.png;
   const [preFetchedUri] = useState(emblemUri);
-  const [emblemOrMapUri, setEmblemOrMapUri] = useState('https://c.tenor.com/oGoY4h0pGYUAAAAj/updatess.gif');
+  const loadingGifLink = 'https://c.tenor.com/oGoY4h0pGYUAAAAj/updatess.gif';
+  const [emblemOrMapUri, setEmblemOrMapUri] = useState(loadingGifLink);
 
   useEffect(() => { 
     const valueToSet = !emblemUri ? continentMapLink : preFetchedUri;
@@ -47,7 +48,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     marginVertical: 16,
     backgroundColor: Colors.white,
-    width: Dimensions.get("screen").width - 10,
+    width: Dimensions.get("screen").width - 5,
     height: 130,
     borderRadius: 8,
     borderColor: Colors.appTheme.blue,
