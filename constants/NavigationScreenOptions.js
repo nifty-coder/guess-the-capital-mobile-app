@@ -1,7 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
 import Colors from '../constants/Colors';
 
-const headerStyles = {
+const defaultStyles = {
     headerTitleAlign: 'center',
     headerStyle: {
       backgroundColor: Colors.appTheme.orange
@@ -9,9 +9,9 @@ const headerStyles = {
 };
 
 const BottomTabsNavigationScreenOptions = ({ route }) => ({
-    ...headerStyles,
+    ...defaultStyles,
+    unmountOnBlur: true,
     tabBarStyle: {
-      position: 'absolute',
       borderTopColor: 'rgba(0, 0, 0, .2)',    
       backgroundColor: Colors.appTheme.orange
     },
@@ -35,10 +35,9 @@ const BottomTabsNavigationScreenOptions = ({ route }) => ({
    }
 });
 
-const NativeStackNavigationScreenOptions = {
-  ...headerStyles,  
-};
+const NativeStackNavigationScreenOptions = defaultStyles;
+
 export {
-    BottomTabsNavigationScreenOptions,
-    NativeStackNavigationScreenOptions
+  BottomTabsNavigationScreenOptions,
+  NativeStackNavigationScreenOptions
 };

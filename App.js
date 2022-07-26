@@ -14,6 +14,7 @@ import Colors from './constants/Colors';
 import HomeIntroScreen from './screens/HomeIntroScreen';
 import HomeGameScreen from './screens/HomeGameScreen';
 import WinsScreen from './screens/WinsScreen';
+import VictoryScreen from './screens/VictoryScreen';
 
 const NativeStack = createNativeStackNavigator();
 function GameStackNavigator() {
@@ -24,7 +25,7 @@ function GameStackNavigator() {
       <NativeStack.Screen 
       name="HomeIntro" 
       component={HomeIntroScreen}
-      options={{ title: "Welcome Back!" }} />
+      options={{ title: "Welcome!" }} />
 
       <NativeStack.Screen 
       name="HomeGame" 
@@ -33,10 +34,17 @@ function GameStackNavigator() {
         title: "Guess The Capital",
         headerLeft: () => (
          <Pressable android_ripple={{ color: '#fff' }} onPress={navigation.goBack}>
-          <Image source={StopAppIcon} style={{ height: 75, width: 80, marginBottom: 4 }} />
+          <Image 
+          source={StopAppIcon} 
+          style={{ height: 75, width: 80, marginBottom: 4 }}
+          />
          </Pressable> 
         )
       }} />
+
+      <NativeStack.Screen
+      name="GameVictory"
+      component={VictoryScreen} /> 
     </NativeStack.Navigator>
   );
 };

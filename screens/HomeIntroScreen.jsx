@@ -12,7 +12,7 @@ function HomeIntroScreen({ navigation }) {
      (playerName.includes('<') && (playerName.includes('/>') || playerName.includes('>'))) 
     || (playerName.trim() === '')
     ) {
-      Alert.alert("Invalid Name Text", "Enter proper name.");
+      Alert.alert("Invalid Name Text", "Enter proper name.", { text: 'Okay' });
       setPlayerName('');
       return;
     }
@@ -31,11 +31,10 @@ function HomeIntroScreen({ navigation }) {
         value={playerName} 
         onChangeText={(text) => setPlayerName(text)} />
       </View>
+      
       <CustomButton 
-      style={{
-        backgroundColor: Colors.black,
-        color: Colors.appTheme.orange
-      }}
+      style={{ backgroundColor: Colors.black }}
+      textColor={Colors.appTheme.orange}
       buttonText="Play Game" 
       onPress={playGameHandler} />
     </View>
