@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { Alert, Dimensions, StyleSheet, TextInput, View } from 'react-native';
-
+import BadWordsList from 'badwords-list';
+import BadWordsFilter from 'bad-words';
+import HindiBadWordsFilter from 'profanity-hindi';
 import Colors from '../constants/Colors';
 import CustomButton from '../components/CustomButton';
 
@@ -8,11 +10,14 @@ function HomeIntroScreen({ navigation }) {
   const [playerName, setPlayerName] = useState('');
  
   function playGameHandler() {
+    let EnglishBadWordsFilter = new BadWordsFilter(BadWordsList.array);
     if(
-     (playerName.includes('<') && (playerName.includes('/>') || playerName.includes('>'))) 
-    || (playerName.trim() === '')
+      (playerName.includes('<') && (playerName.includes('/>') 
+      || playerName.includes('>'))) || (playerName.trim() === '')
+      || (EnglishBadWordsFilter.isProfane(playerName)) 
+      || (HindiBadWordsFilter.isMessageDirty(playerName))
     ) {
-      Alert.alert("Invalid Name Text", "Enter proper name.", { text: 'Okay' });
+      Alert.alert("Invalid Name!", "Enter a proper name.", [{ text: 'Okay' }]);
       setPlayerName('');
       return;
     }

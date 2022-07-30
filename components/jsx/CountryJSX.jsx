@@ -6,11 +6,11 @@ export default function CountryJSX({ player, wonGame, capital, randomizedCountry
      player={player}
      wonGame={wonGame}
      capital={capital}
-     flag={randomizedCountry?.flag} 
-     name={randomizedCountry?.name?.common} 
-     population={randomizedCountry?.population}
-     continents={randomizedCountry?.continents}
-     seal={randomizedCountry?.coatOfArms}
+     flag={randomizedCountry.flag} 
+     name={randomizedCountry.name.common} 
+     population={randomizedCountry.population}
+     continents={randomizedCountry.continents}
+     seal={randomizedCountry.coatOfArms}
     />
   );
 };

@@ -35,7 +35,15 @@ export function getContinentMap(continent) {
   return mapLink;
 };
 
-export async function fetchCountriesAndReturnRandomCountry() {
+function getRandomNumber(index, response) {
+  let randomIndex = Math.floor(Math.random() * response.length + 1);
+  if(randomIndex === index) {
+   return getRandomNumber(index, response);
+  } else {
+    return randomIndex;
+  }
+};
+export async function fetchCountriesAndReturnRandomCountries() {
   const response = await fetch(API_INITIAL_LINK + '/all', {
     method: 'GET',
     headers: {
@@ -45,14 +53,29 @@ export async function fetchCountriesAndReturnRandomCountry() {
   }).then((res) => res.json()); 
 
   if(!response) {
-    throw new Error("Couldn't select a random country. Try again!");
+    return;
   } 
 
-  const randomCountry = response[Math.floor(Math.random() * response.length)];
-  return randomCountry;
+  const setOfIndexes = new Set();
+  while(setOfIndexes.size < 4) {
+    let randomIndex = Math.floor(Math.random() * response.length + 1);
+    if(!response[randomIndex].capital) {
+      let newRandomIndex = getRandomNumber(randomIndex, response);
+      setOfIndexes.add(newRandomIndex);
+    }
+    setOfIndexes.add(randomIndex);
+  }
+
+  const arrayOfIndexesSet = Array.from(setOfIndexes);
+  const arrayOfCountries = [];  
+  for (let i = 0; i < arrayOfIndexesSet.length; i++) {
+    arrayOfCountries[i] = response[arrayOfIndexesSet[i]];
+  }
+
+  return arrayOfCountries;
 };
 
-function shuffle(array) {
+function shuffle(array = []) {
   let currentIndex = array.length, randomIndex;
 
   while (currentIndex != 0) {
@@ -63,33 +86,11 @@ function shuffle(array) {
 
   return array;
 };
-export async function fetchAnswers(country) {
-  const correctAnswer = country?.capital.map((cap) => cap).join(", ");
-  const firstWrongAnswer = await fetchCountriesAndReturnRandomCountry();
-  const secondWrongAnswer = await fetchCountriesAndReturnRandomCountry();
-  const thirdWrongAnswer = await fetchCountriesAndReturnRandomCountry();
-
-  // if(
-  //   (!firstWrongAnswer || !secondWrongAnswer || !thirdWrongAnswer) ||
-  //   (country.name.common === Antarctica) || 
-  //   (firstWrongAnswer.name.common === Antarctica) || 
-  //   (secondWrongAnswer.name.common === Antarctica) || 
-  //   (thirdWrongAnswer.name.common === Antarctica)
-  // ) {
-  //  console.log("entered if in fetch answers");
-  //  await fetchAnswers(country);
-  // }
-
-  const firstWrongAnswers = firstWrongAnswer?.capital?.map((cap) => cap).join(", ");
-  const secondWrongAnswers = secondWrongAnswer?.capital?.map((cap) => cap).join(", ");
-  const thirdWrongAnswers = thirdWrongAnswer?.capital?.map((cap) => cap).join(", ");
-    
-  const answersArray = shuffle([ 
-    correctAnswer, 
-    firstWrongAnswers,
-    secondWrongAnswers,
-    thirdWrongAnswers
-  ]);
-
-  return answersArray;
+export async function fetchAnswers(countryList) {
+  const correctAnswer = countryList[0].capital?.map((cap) => cap).join(", ");
+  const firstAnswer = countryList[1].capital?.map((cap) => cap).join(", ");
+  const secondAnswer = countryList[2].capital?.map((cap) => cap).join(", ");
+  const thirdAnswer = countryList[3].capital?.map((cap) => cap).join(", ");
+  const answersArray = [correctAnswer, firstAnswer, secondAnswer, thirdAnswer];
+  return shuffle(answersArray);
 };

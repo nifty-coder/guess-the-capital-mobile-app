@@ -1,29 +1,32 @@
 import { useEffect, useState } from 'react';
-import { Alert, StyleSheet, View } from 'react-native';
+import { Alert, RefreshControl, ScrollView, StyleSheet, View } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { fetchAnswers, fetchCountriesAndReturnRandomCountry } from '../constants/Data';
+import { fetchCountriesAndReturnRandomCountries, fetchAnswers } from '../constants/Data';
 import Colors from '../constants/Colors';
 import CountryJSX from '../components/jsx/CountryJSX';
 import CustomButton from '../components/CustomButton';
 
 function HomeGameScreen({ navigation, route }) {
- const [gameOver, setGameOver] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
+  const [gameOver, setGameOver] = useState(false);
   const [randomizedCountry, setRandomizedCountry] = useState();
   const [randomizedAnswers, setRandomizedAnswers] = useState();
 
-  useEffect(() => {
+  const loadData = async () => {
     setGameOver(false);
-    const loadData = async () => {
-      if (!gameOver) {
-        const result = await fetchCountriesAndReturnRandomCountry();
-        setRandomizedCountry(result);
-        
-        const answersResult = await fetchAnswers(result);
-        setRandomizedAnswers(answersResult);
-      } else return;
-    };
+    if(!gameOver) {
+      setRefreshing(true);
+      const countriesResult = await fetchCountriesAndReturnRandomCountries();
+      setRandomizedCountry(countriesResult[0]);      
+      const answersResult = await fetchAnswers(countriesResult);
+      setRandomizedAnswers(answersResult);
+      setRefreshing(false);
+    } else return;
+  };
+  useEffect(() => {
     loadData();
-  }, [gameOver, fetchCountriesAndReturnRandomCountry, fetchAnswers]);
+    return () => setGameOver(true);
+  }, [gameOver]);
 
   const onAnswerClickHandler = async (answer) => {
    const correctAnswer = randomizedCountry.capital.map((cap) => cap); 
@@ -39,10 +42,11 @@ function HomeGameScreen({ navigation, route }) {
      if(!wins.includes(randomizedCountry)) {
       wins.push({ country: randomizedCountry, player: route.params.playerName });
       await AsyncStorage.setItem("wins", JSON.stringify(wins));
+      setGameOver(true);
+      navigation.navigate("GameVictory", { playerName: route.params.playerName }); 
+     } else {
+      setGameOver(true);
      }
-
-     setGameOver(true);
-     navigation.navigate("GameVictory", { playerName: route.params.playerName });
     } else {
       Alert.alert(
         "Oops, you got that wrong!", 
@@ -59,7 +63,11 @@ function HomeGameScreen({ navigation, route }) {
   };
 
   return (
-    <View style={styles.container}>
+    <ScrollView 
+    style={styles.container}
+    refreshControl={      
+     <RefreshControl refreshing={refreshing} onRefresh={loadData} />
+    }>
      {randomizedCountry && <CountryJSX
       player={route.params.playerName}
       wonGame={gameOver}
@@ -75,7 +83,7 @@ function HomeGameScreen({ navigation, route }) {
        onPress={() => onAnswerClickHandler(Array.of(randomizedAnswer))} />
       </View>
      ))}
-    </View>
+    </ScrollView>
   );
 };
 

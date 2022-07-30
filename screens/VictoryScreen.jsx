@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect } from 'react';
+import { useLayoutEffect } from 'react';
 import { View, Text, StyleSheet, Pressable, Image } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import CustomButton from '../components/CustomButton';
@@ -54,7 +54,7 @@ function VictoryScreen({ navigation, route }) {
         style={styles.myScoreAndWinsButton} 
         textColor={Colors.white} 
         buttonText={"My Wins & Score"}
-        onPress={() => navigation.navigate("Wins")}
+        onPress={() => navigation.navigate("Wins",{playerName})}
         />
       </View>
     </View>

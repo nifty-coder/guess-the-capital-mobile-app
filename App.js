@@ -53,7 +53,7 @@ const AppBottomTabs = createBottomTabNavigator();
 function App() {
   return (
     <>
-     <StatusBar style="dark" />
+     <StatusBar translucent backgroundColor="transparent" style="dark" />
    
      <NavigationContainer>
       <AppBottomTabs.Navigator screenOptions={BottomTabsNavigationScreenOptions}>
@@ -70,7 +70,8 @@ function App() {
         component={WinsScreen}
         options={{
           title: 'Your Wins',
-          tabBarActiveTintColor: Colors.appTheme.darkgreen
+          tabBarActiveTintColor: Colors.appTheme.darkgreen,
+          playerName: ''
         }} />
       </AppBottomTabs.Navigator> 
      </NavigationContainer>
