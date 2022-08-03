@@ -3,14 +3,12 @@ import { Image, Pressable } from 'react-native';
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-
 import { 
   BottomTabsNavigationScreenOptions, 
   NativeStackNavigationScreenOptions 
 } from './constants/NavigationScreenOptions';
 import StopAppIcon from './assets/stop-app-icon.png';
 import Colors from './constants/Colors';
-
 import HomeIntroScreen from './screens/HomeIntroScreen';
 import HomeGameScreen from './screens/HomeGameScreen';
 import WinsScreen from './screens/WinsScreen';

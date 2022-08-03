@@ -2,13 +2,13 @@ import { useEffect, useLayoutEffect, useState } from 'react';
 import { StyleSheet, Pressable, Text, Image, View, FlatList, Alert, RefreshControl } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import CountryJSX from '../components/jsx/CountryJSX';
 import Colors from '../constants/Colors';
 import LoadingGif from '../assets/loadingWins.gif';
+import CountryCard from '../components/CountryCard';
 
 function WinsScreen({ navigation, route }) {
   const [refreshing, setRefreshing] = useState(false);
-  const playerName = route?.params?.playerName;
+//  const playerName = route?.params?.playerName;
   let data;
   const [winCountries, setWinCountries] = useState([]);
   
@@ -56,14 +56,21 @@ function WinsScreen({ navigation, route }) {
   }, [data]);
   
   function renderCountryList(winc, i) {
-    return (
-     <View>
-      <CountryJSX
-      key={i}
-      player={winc.player}
-      wonGame={true}
-      capital={winc.country.capital}
-      randomizedCountry={winc.country} />
+   const { capital, flag, name, population, continents, coatOfArms } = winc.country;
+   
+   return (
+    <View>
+     <CountryCard
+     key={i}
+     player={winc.player}
+     wonGame={true}
+     capital={capital}
+     flag={flag} 
+     name={name.common} 
+     population={population}
+     continents={continents}
+     seal={coatOfArms}
+     />
 
       <View
       style={{
@@ -90,6 +97,7 @@ function WinsScreen({ navigation, route }) {
      Your Score: {winCountries ? winCountries.length : '0'}
     </Text>
     {jsx}
+    {winCountries && <Text style={styles.thatsItText}>That's it so far!</Text>}
    </View>
   );
 };
@@ -107,5 +115,11 @@ const styles = StyleSheet.create({
   loadingGif: {
     marginTop: 16,
     alignSelf: 'center'
+  },
+  thatsItText: {
+    marginTop: 4,
+    textAlign: 'center',
+    fontSize: 18,
+    fontStyle: 'italic'
   }
 });

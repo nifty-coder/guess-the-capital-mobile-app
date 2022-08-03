@@ -1,24 +1,39 @@
 import { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Image, Dimensions } from 'react-native';
+import Colors from '../constants/Colors';
+// import { useIsFocused } from '@react-navigation/native';
 import { commafyNumber } from 'commafy-any-number';
 import { getContinentMap } from '../constants/Data';
-import Colors from '../constants/Colors';
+// import { isScreenInFocus } from '../constants/NavigationScreenOptions';
+// import { useNavigation } from '@react-navigation/native';
 
-const CountryCard = ({ 
-  player, wonGame, capital, flag, name, population, continents, seal 
-}) => {
+const CountryCard = (props) => {
+  const { 
+    player, wonGame, capital, flag, name, population, continents, seal 
+  } = props;
+//  const focused = useIsFocused();
+  const [loading, setLoading] = useState(true);
   const continentMapLink = getContinentMap(continents[0]);
   const emblemUri = Object.keys(seal).length !== 0 && seal.png;
-  const [preFetchedUri] = useState(emblemUri);
   const loadingGifLink = 'https://c.tenor.com/oGoY4h0pGYUAAAAj/updatess.gif';
-  const [emblemOrMapUri, setEmblemOrMapUri] = useState(loadingGifLink);
+  let emblemOrMapUri = loading ? loadingGifLink : (!emblemUri ? continentMapLink : emblemUri);
+//  const navigation = useNavigation();
+  // const focus = isScreenInFocus(navigation);
   
-  useEffect(() => { 
-    const valueToSet = !emblemUri ? continentMapLink : preFetchedUri;
-    setTimeout(() => {
-      setEmblemOrMapUri(valueToSet);
-    }, 1000);
-  }, []);
+  // useEffect(() => {
+  //   const value = !emblemUri ? continentMapLink : preFetchedUri;
+  //    setTimeout(() => {
+  //       setEmblemOrMapUri(value);
+  //    }, 1000);  
+  // }, [props]);
+
+  useEffect(() => {
+    if(loading) {
+      setTimeout(() => {
+        setLoading(false);
+      }, 1000);       
+    }
+  }, [props]);
 
   let cmpStyles = wonGame ? styles.winsScreenDisplay : styles.gameScreenDisplay;
 
@@ -67,7 +82,7 @@ const styles = StyleSheet.create({
     height: 330
   },
   winsScreenDisplay: {
-    height: 420
+    height: 440
   },
   flag: {
    fontSize: 50

@@ -59,7 +59,11 @@ export async function fetchCountriesAndReturnRandomCountries() {
   const setOfIndexes = new Set();
   while(setOfIndexes.size < 4) {
     let randomIndex = Math.floor(Math.random() * response.length + 1);
-    if(!response[randomIndex].capital) {
+   // console.log(response[randomIndex]);
+     if(
+      !response[randomIndex].capital || response[randomIndex].population === 0 
+      || response[randomIndex].continents[0] === Antarctica
+    ) {
       let newRandomIndex = getRandomNumber(randomIndex, response);
       setOfIndexes.add(newRandomIndex);
     }

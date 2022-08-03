@@ -1,36 +1,40 @@
 import { useEffect, useState } from 'react';
-import { Alert, RefreshControl, ScrollView, StyleSheet, View } from 'react-native';
+import { Alert, StyleSheet, View } from 'react-native';
+// import { useIsFocused } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { fetchCountriesAndReturnRandomCountries, fetchAnswers } from '../constants/Data';
 import Colors from '../constants/Colors';
-import CountryJSX from '../components/jsx/CountryJSX';
+import CountryCard from '../components/CountryCard';
 import CustomButton from '../components/CustomButton';
+import { isScreenInFocus } from '../constants/NavigationScreenOptions';
 
 function HomeGameScreen({ navigation, route }) {
-  const [refreshing, setRefreshing] = useState(false);
+ // const focused = useIsFocused();
   const [gameOver, setGameOver] = useState(false);
   const [randomizedCountry, setRandomizedCountry] = useState();
   const [randomizedAnswers, setRandomizedAnswers] = useState();
 
-  const loadData = async () => {
-    setGameOver(false);
-    if(!gameOver) {
-      setRefreshing(true);
-      const countriesResult = await fetchCountriesAndReturnRandomCountries();
-      setRandomizedCountry(countriesResult[0]);      
-      const answersResult = await fetchAnswers(countriesResult);
-      setRandomizedAnswers(answersResult);
-      setRefreshing(false);
-    } else return;
-  };
   useEffect(() => {
-    loadData();
-    return () => setGameOver(true);
-  }, [gameOver]);
+    const unsubscribe = navigation.addListener('focus', () => {
+      setGameOver(false);
+      const loadData = async () => {
+        if(!gameOver) {
+          const countriesResult = await fetchCountriesAndReturnRandomCountries();
+          setRandomizedCountry(countriesResult[0]);      
+          const answersResult = await fetchAnswers(countriesResult);
+          setRandomizedAnswers(answersResult);
+        } else return;
+      };
+      loadData();  
+    });
+
+    return unsubscribe;
+  }, [navigation]);
 
   const onAnswerClickHandler = async (answer) => {
    const correctAnswer = randomizedCountry.capital.map((cap) => cap); 
-   const correct = answer.every((value, index) => value === correctAnswer[index]);
+   const correct = answer.length === correctAnswer.length 
+   && answer.every((value, index) => value === correctAnswer[index]);
  
     if(correct) {
      let wins = await AsyncStorage.getItem("wins").then((res) => {
@@ -62,19 +66,27 @@ function HomeGameScreen({ navigation, route }) {
     }
   };
 
-  return (
-    <ScrollView 
-    style={styles.container}
-    refreshControl={      
-     <RefreshControl refreshing={refreshing} onRefresh={loadData} />
-    }>
-     {randomizedCountry && <CountryJSX
+  function renderCountry() {
+    const { capital, flag, name, population, continents, coatOfArms } = randomizedCountry;
+    console.log(coatOfArms);
+    return (
+      <CountryCard
       player={route.params.playerName}
       wonGame={gameOver}
-      capital={randomizedCountry.capital}
-      randomizedCountry={randomizedCountry} />}
+      capital={capital}
+      flag={flag} 
+      name={name.common} 
+      population={population}
+      continents={continents}
+      seal={coatOfArms}
+      />
+    );
+  };
 
-      {randomizedAnswers && randomizedAnswers.map((randomizedAnswer, i) => (
+  return (
+    <View style={styles.container}>
+     {randomizedCountry && renderCountry()}
+     {randomizedAnswers && randomizedAnswers.map((randomizedAnswer, i) => (
       <View key={i} style={{ marginBottom: 15, borderRadius: 5 }}>
        <CustomButton 
        style={{ backgroundColor: Colors.appTheme.reddish }}
@@ -83,7 +95,7 @@ function HomeGameScreen({ navigation, route }) {
        onPress={() => onAnswerClickHandler(Array.of(randomizedAnswer))} />
       </View>
      ))}
-    </ScrollView>
+    </View>
   );
 };
 

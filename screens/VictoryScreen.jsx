@@ -39,7 +39,7 @@ function VictoryScreen({ navigation, route }) {
       style={styles.playAgainButton} 
       textColor={Colors.white} 
       buttonText="Play again"
-      onPress={() => navigation.navigate("HomeGame", { playerName })} 
+      onPress={() => navigation.navigate("HomeGame", { playerName: playerName })} 
       />
 
       <View style={styles.buttonContainer}>
