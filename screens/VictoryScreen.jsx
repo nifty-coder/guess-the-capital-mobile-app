@@ -1,10 +1,11 @@
-import { useLayoutEffect } from 'react';
+import { useEffect, useLayoutEffect, useState } from 'react';
 import { View, Text, StyleSheet, Pressable, Image } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import CustomButton from '../components/CustomButton';
 import Colors from '../constants/Colors';
 
 function VictoryScreen({ navigation, route }) {
+  const [uri, setUri] = useState('https://c.tenor.com/oGoY4h0pGYUAAAAj/updatess.gif');
   const playerName = route.params.playerName;
 
   useLayoutEffect(() => {
@@ -26,36 +27,35 @@ function VictoryScreen({ navigation, route }) {
       ) 
     });
   }, [navigation]);
+
+  useEffect(() => {
+    const link = 'https://i.ibb.co/DtJtV7V/trophy.jpg';
+    setTimeout(() => {
+      setUri(link);
+    }, 100);
+  }, []);
   
   return (
     <View style={styles.container}>
-      <Image 
-      source={{ uri: 'https://i.ibb.co/DtJtV7V/trophy.jpg' }} 
-      style={styles.image} 
-      />
+      <Image source={{ uri: uri }} style={styles.image} />
       <Text style={styles.text}>Great job, {playerName}!</Text>
-      
       <CustomButton 
       style={styles.playAgainButton} 
       textColor={Colors.white} 
       buttonText="Play again"
-      onPress={() => navigation.navigate("HomeGame", { playerName: playerName })} 
-      />
-
+      onPress={() => navigation.navigate("HomeGame", { playerName: playerName })} />
       <View style={styles.buttonContainer}>
         <CustomButton 
         style={styles.homeButton} 
         textColor={Colors.white} 
         buttonText="Go back to Home" 
-        onPress={() => navigation.navigate("HomeIntro")}
-        />
+        onPress={() => navigation.navigate("HomeIntro")} />
 
         <CustomButton 
         style={styles.myScoreAndWinsButton} 
         textColor={Colors.white} 
         buttonText={"My Wins & Score"}
-        onPress={() => navigation.navigate("Wins",{playerName})}
-        />
+        onPress={() => navigation.navigate("Wins", { playerName: playerName })} />
       </View>
     </View>
   );

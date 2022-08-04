@@ -1,31 +1,18 @@
 import { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Image, Dimensions } from 'react-native';
-import Colors from '../constants/Colors';
-// import { useIsFocused } from '@react-navigation/native';
 import { commafyNumber } from 'commafy-any-number';
+import Colors from '../constants/Colors';
 import { getContinentMap } from '../constants/Data';
-// import { isScreenInFocus } from '../constants/NavigationScreenOptions';
-// import { useNavigation } from '@react-navigation/native';
 
 const CountryCard = (props) => {
   const { 
     player, wonGame, capital, flag, name, population, continents, seal 
   } = props;
-//  const focused = useIsFocused();
   const [loading, setLoading] = useState(true);
   const continentMapLink = getContinentMap(continents[0]);
   const emblemUri = Object.keys(seal).length !== 0 && seal.png;
   const loadingGifLink = 'https://c.tenor.com/oGoY4h0pGYUAAAAj/updatess.gif';
   let emblemOrMapUri = loading ? loadingGifLink : (!emblemUri ? continentMapLink : emblemUri);
-//  const navigation = useNavigation();
-  // const focus = isScreenInFocus(navigation);
-  
-  // useEffect(() => {
-  //   const value = !emblemUri ? continentMapLink : preFetchedUri;
-  //    setTimeout(() => {
-  //       setEmblemOrMapUri(value);
-  //    }, 1000);  
-  // }, [props]);
 
   useEffect(() => {
     if(loading) {
@@ -79,10 +66,10 @@ const styles = StyleSheet.create({
     borderWidth: 2
   },
   gameScreenDisplay: {
-    height: 330
+    height: 400
   },
   winsScreenDisplay: {
-    height: 440
+    height: 490
   },
   flag: {
    fontSize: 50
@@ -94,7 +81,8 @@ const styles = StyleSheet.create({
    fontSize: 18
   },
   seal: {
-   width: 200,
-   height: '58%'
+   width: 320,
+   height: '60%',
+   resizeMode: 'contain' 
   }
 });

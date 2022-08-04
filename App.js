@@ -7,7 +7,7 @@ import {
   BottomTabsNavigationScreenOptions, 
   NativeStackNavigationScreenOptions 
 } from './constants/NavigationScreenOptions';
-import StopAppIcon from './assets/stop-app-icon.png';
+import RestartIcon from './assets/restart-icon.png';
 import Colors from './constants/Colors';
 import HomeIntroScreen from './screens/HomeIntroScreen';
 import HomeGameScreen from './screens/HomeGameScreen';
@@ -33,9 +33,8 @@ function GameStackNavigator() {
         headerLeft: () => (
          <Pressable android_ripple={{ color: '#fff' }} onPress={navigation.goBack}>
           <Image 
-          source={StopAppIcon} 
-          style={{ height: 75, width: 80, marginBottom: 4 }}
-          />
+          source={RestartIcon} 
+          style={{ height: 80, width: 80, marginBottom: 2 }} />
          </Pressable> 
         )
       }} />

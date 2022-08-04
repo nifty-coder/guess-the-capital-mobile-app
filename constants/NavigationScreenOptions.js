@@ -38,27 +38,7 @@ const BottomTabsNavigationScreenOptions = ({ route }) => ({
 
 const NativeStackNavigationScreenOptions = defaultStyles;
 
-// const isScreenInFocus = (navigation) => {
-//   let isFocused = navigation.isFocused();
-
-//   // useEffect(() => {
-//     const didBlur = () => isFocused = false;
-//     const didFocus = () => isFocused = true;
-
-//     const blurSubscription = navigation.addListener('didBlur', didBlur);
-//     const focusSubscription = navigation.addListener('didFocus', didFocus);
-    
-//     // return () => {
-//     //   blurSubscription.remove();
-//     //   focusSubscription.remove();
-//     // };
-//   // }, []);
-  
-//   return isFocused;
-// };
-
 export {
   BottomTabsNavigationScreenOptions,
-  NativeStackNavigationScreenOptions,
-  // isScreenInFocus
+  NativeStackNavigationScreenOptions
 };

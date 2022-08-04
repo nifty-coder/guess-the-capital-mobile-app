@@ -1,13 +1,12 @@
 import { StyleSheet, Text, Pressable } from 'react-native';
-import Colors from '../constants/Colors';
 
-const CustomButton = ({ onPress, style, textColor, buttonText }) => {
+const CustomButton = ({ onPress, style, textColor, label, buttonText }) => {
   return (
     <Pressable 
     android_ripple={{ color: '#fff' }} 
     onPress={onPress} 
     style={[style, styles.pressable]}>
-      <Text style={[{ color: textColor }, styles.buttonText]}>{buttonText}</Text>
+      <Text style={[{ color: textColor }, styles.buttonText]}>{label} {buttonText}</Text>
     </Pressable>
   );
 };
@@ -17,11 +16,13 @@ export default CustomButton;
 const styles = StyleSheet.create({
     pressable: {
      borderRadius: 90,
-     elevation: 5,
-     borderWidth: 1,
-     marginHorizontal: 66
+     elevation: 10,
+     borderWidth: 3,
+     marginHorizontal: 66,
+     height: 30
     },
     buttonText: {
-      textAlign: 'center'
+      textAlign: 'center',
+      fontSize: 14.5
     }
 });
