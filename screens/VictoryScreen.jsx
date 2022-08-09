@@ -1,16 +1,17 @@
 import { useEffect, useLayoutEffect, useState } from 'react';
 import { View, Text, StyleSheet, Pressable, Image } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import CustomButton from '../components/CustomButton';
 import Colors from '../constants/Colors';
 
-function VictoryScreen({ navigation, route }) {
+function VictoryScreen({ navigation }) {
   const [uri, setUri] = useState('https://c.tenor.com/oGoY4h0pGYUAAAAj/updatess.gif');
-  const playerName = route.params.playerName;
+  const [playerName, setPlayerName] = useState('');
 
   useLayoutEffect(() => {
     navigation.setOptions({ 
-      title: "You Won!",
+      title: "Game Over",
       headerLeft: () => (
        <Pressable 
        android_ripple={{ color: '#fff' }} 
@@ -29,10 +30,14 @@ function VictoryScreen({ navigation, route }) {
   }, [navigation]);
 
   useEffect(() => {
-    const link = 'https://i.ibb.co/DtJtV7V/trophy.jpg';
+    const link = 'https://i.ibb.co/Wy8Z2bM/trophygtc.jpg';
     setTimeout(() => {
       setUri(link);
     }, 100);
+    (async () => {
+      let player = await AsyncStorage.getItem("player");
+      setPlayerName(player);
+    })();
   }, []);
   
   return (
@@ -40,22 +45,29 @@ function VictoryScreen({ navigation, route }) {
       <Image source={{ uri: uri }} style={styles.image} />
       <Text style={styles.text}>Great job, {playerName}!</Text>
       <CustomButton 
+      disabled={false}
       style={styles.playAgainButton} 
+      bgColor={Colors.appTheme.darkblue}
       textColor={Colors.white} 
-      buttonText="Play again"
-      onPress={() => navigation.navigate("HomeGame", { playerName: playerName })} />
+      buttonText="Play another game"
+      onPress={() => navigation.navigate("HomeGame")} />
+ 
       <View style={styles.buttonContainer}>
         <CustomButton 
-        style={styles.homeButton} 
+        disabled={false}
+        style={styles.homeButton}
+        bgColor={Colors.appTheme.reddish} 
         textColor={Colors.white} 
         buttonText="Go back to Home" 
         onPress={() => navigation.navigate("HomeIntro")} />
 
         <CustomButton 
-        style={styles.myScoreAndWinsButton} 
+        disabled={false}
+        style={styles.scoreSummaryButton} 
+        bgColor={Colors.appTheme.darkgreen} 
         textColor={Colors.white} 
-        buttonText={"My Wins & Score"}
-        onPress={() => navigation.navigate("Wins", { playerName: playerName })} />
+        buttonText={"Score Summary"}
+        onPress={() => navigation.navigate("Score", { playerName: playerName })} />
       </View>
     </View>
   );
@@ -80,18 +92,15 @@ const styles = StyleSheet.create({
     flexDirection: 'row'
   },
   playAgainButton: {
-    backgroundColor: Colors.appTheme.darkblue,
-    width: 100,
+    width: 150,
     marginTop: 4  
   },
   homeButton: {
-    backgroundColor: Colors.appTheme.reddish,
-    width: 100,
+    width: 150,
     marginTop: 6
   },
-  myScoreAndWinsButton: {
-    backgroundColor: Colors.appTheme.darkgreen,
-    width: 100,
+  scoreSummaryButton: {
+    width: 150,
     marginTop: 6,
     marginLeft: 2
   }

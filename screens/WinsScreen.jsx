@@ -6,12 +6,11 @@ import Colors from '../constants/Colors';
 import LoadingGif from '../assets/loadingWins.gif';
 import CountryCard from '../components/CountryCard';
 
-function WinsScreen({ navigation, route }) {
-  const [refreshing, setRefreshing] = useState(false);
-//  const playerName = route?.params?.playerName;
-  let data;
+function WinsScreen({ navigation }) {
+  let data, player;
   const [winCountries, setWinCountries] = useState([]);
-  
+  const [winner, setWinner] = useState();
+
   useLayoutEffect(() => {
     const clearData = async () => {
       await AsyncStorage.removeItem("wins"); 
@@ -31,19 +30,17 @@ function WinsScreen({ navigation, route }) {
   }, [navigation]);
 
   const loadAsyncStorageData = async () => {
-    setRefreshing(true);
     data = await AsyncStorage.getItem("wins").then((res) => {
       let parsedData = JSON.parse(res);
-      // playerName = "Husky";
-      // let filteredData = parsedData.filter((win) => win.player === playerName);
       return parsedData;
     }); 
-    setRefreshing(false);
+    player = await AsyncStorage.getItem("player");
   };
   useEffect(() => {
    loadAsyncStorageData()
     .then(() => {
       setWinCountries(data);
+      setWinner(player);
     }).catch((err) => {
      return Alert.alert(
       "Something went wrong!", 
@@ -56,27 +53,22 @@ function WinsScreen({ navigation, route }) {
   }, [data]);
   
   function renderCountryList(winc, i) {
-   const { capital, flag, name, population, continents, coatOfArms } = winc.country;
+   const { capital, flag, name, population, continents, coatOfArms } = winc;
    
    return (
     <View>
      <CountryCard
      key={i}
-     player={winc.player}
-     wonGame={true}
+     player={winner}
+     wonGame
      capital={capital}
      flag={flag} 
      name={name.common} 
      population={population}
      continents={continents}
-     seal={coatOfArms}
-     />
+     seal={coatOfArms} />
 
-      <View
-      style={{
-       borderBottomColor: Colors.appTheme.orange,
-       borderBottomWidth: 2
-      }} />
+     <View style={styles.divider} />
      </View>
     );
   };
@@ -84,15 +76,11 @@ function WinsScreen({ navigation, route }) {
   const jsx = winCountries ? (
     <FlatList 
     data={winCountries}
-    renderItem={({ item, index }) => renderCountryList(item, index)}
-    refreshing={refreshing}
-    refreshControl={
-      <RefreshControl refreshing={refreshing} onRefresh={loadAsyncStorageData} />
-    } />  
+    renderItem={({ item, index }) => renderCountryList(item, index)} />
   ) : <Image source={LoadingGif} style={styles.loadingGif} />;
 
   return (
-   <View>
+   <View style={{ flex: 1 }}>
     <Text style={styles.scoreText}>
      Your Score: {winCountries ? winCountries.length : '0'}
     </Text>
@@ -115,6 +103,10 @@ const styles = StyleSheet.create({
   loadingGif: {
     marginTop: 16,
     alignSelf: 'center'
+  },
+  divider: {
+    borderBottomColor: Colors.appTheme.orange,
+    borderBottomWidth: 2
   },
   thatsItText: {
     marginTop: 4,

@@ -20,6 +20,8 @@ const CountryCard = (props) => {
         setLoading(false);
       }, 1000);       
     }
+
+    return () => setLoading(false);
   }, [props]);
 
   let cmpStyles = wonGame ? styles.winsScreenDisplay : styles.gameScreenDisplay;
@@ -69,7 +71,7 @@ const styles = StyleSheet.create({
     height: 400
   },
   winsScreenDisplay: {
-    height: 490
+    height: 465
   },
   flag: {
    fontSize: 50

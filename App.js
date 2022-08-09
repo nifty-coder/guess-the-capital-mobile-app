@@ -1,13 +1,13 @@
+import { useEffect, useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { Image, Pressable } from 'react-native';
-import { NavigationContainer, useNavigation } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { 
   BottomTabsNavigationScreenOptions, 
   NativeStackNavigationScreenOptions 
 } from './constants/NavigationScreenOptions';
-import RestartIcon from './assets/restart-icon.png';
 import Colors from './constants/Colors';
 import HomeIntroScreen from './screens/HomeIntroScreen';
 import HomeGameScreen from './screens/HomeGameScreen';
@@ -16,32 +16,36 @@ import VictoryScreen from './screens/VictoryScreen';
 
 const NativeStack = createNativeStackNavigator();
 function GameStackNavigator() {
-  const navigation = useNavigation();
+  const [enteredPlayerName, setEnteredPlayerName] = useState();
+  useEffect(() => {
+    const loadPlayer = async () => {
+      let player = await AsyncStorage.getItem("player");
+      setEnteredPlayerName(player);
+    };  
+    loadPlayer();
+  });
 
   return (
-    <NativeStack.Navigator screenOptions={NativeStackNavigationScreenOptions}>
+    <NativeStack.Navigator 
+    screenOptions={NativeStackNavigationScreenOptions}
+    initialRouteName={!enteredPlayerName ? "HomeIntro" : "HomeGame"}>
       <NativeStack.Screen 
       name="HomeIntro" 
       component={HomeIntroScreen}
-      options={{ title: "Welcome!" }} />
-
-      <NativeStack.Screen 
-      name="HomeGame" 
-      component={HomeGameScreen} 
-      options={{
-        title: "Guess The Capital",
-        headerLeft: () => (
-         <Pressable android_ripple={{ color: '#fff' }} onPress={navigation.goBack}>
-          <Image 
-          source={RestartIcon} 
-          style={{ height: 80, width: 80, marginBottom: 2 }} />
-         </Pressable> 
-        )
+      options={{ 
+        title: "Welcome!",
+        headerBackVisible: false 
       }} />
+      <NativeStack.Screen name="HomeGame" component={HomeGameScreen} />
+      <NativeStack.Screen name="GameVictory" component={VictoryScreen} /> 
+    </NativeStack.Navigator>
+  );
+};
 
-      <NativeStack.Screen
-      name="GameVictory"
-      component={VictoryScreen} /> 
+function ScoreStackNavigator() {
+  return (
+    <NativeStack.Navigator screenOptions={NativeStackNavigationScreenOptions}>
+      <NativeStack.Screen name="Wins" component={WinsScreen} />
     </NativeStack.Navigator>
   );
 };
@@ -51,7 +55,6 @@ function App() {
   return (
     <>
      <StatusBar translucent backgroundColor="transparent" style="dark" />
-   
      <NavigationContainer>
       <AppBottomTabs.Navigator screenOptions={BottomTabsNavigationScreenOptions}>
         <AppBottomTabs.Screen 
@@ -63,12 +66,13 @@ function App() {
         }} />
 
         <AppBottomTabs.Screen 
-        name="Wins" 
-        component={WinsScreen}
+        name="Score" 
+        component={ScoreStackNavigator}
         options={{
-          title: 'Your Wins',
+          unmountOnBlur: true,
+          title: 'Score Summary',
           tabBarActiveTintColor: Colors.appTheme.darkgreen,
-          playerName: ''
+          headerShown: false
         }} />
       </AppBottomTabs.Navigator> 
      </NavigationContainer>

@@ -35,14 +35,6 @@ export function getContinentMap(continent) {
   return mapLink;
 };
 
-function getRandomNumber(index, response) {
-  let randomIndex = Math.floor(Math.random() * response.length + 1);
-  if(randomIndex === index) {
-   return getRandomNumber(index, response);
-  } else {
-    return randomIndex;
-  }
-};
 export async function fetchCountriesAndReturnRandomCountries() {
   const response = await fetch(API_INITIAL_LINK + '/all', {
     method: 'GET',
@@ -55,27 +47,21 @@ export async function fetchCountriesAndReturnRandomCountries() {
   if(!response) {
     return;
   } 
-
-  const setOfIndexes = new Set();
-  while(setOfIndexes.size < 4) {
+  
+  const setOfCountries = new Set();
+  while(setOfCountries.size < 4) {
     let randomIndex = Math.floor(Math.random() * response.length + 1);
-   // console.log(response[randomIndex]);
-     if(
-      !response[randomIndex].capital || response[randomIndex].population === 0 
+    if(
+      response[randomIndex].capital === undefined || response[randomIndex].population === 0 
       || response[randomIndex].continents[0] === Antarctica
     ) {
-      let newRandomIndex = getRandomNumber(randomIndex, response);
-      setOfIndexes.add(newRandomIndex);
+      continue;
     }
-    setOfIndexes.add(randomIndex);
+
+    setOfCountries.add(response[randomIndex]);
   }
 
-  const arrayOfIndexesSet = Array.from(setOfIndexes);
-  const arrayOfCountries = [];  
-  for (let i = 0; i < arrayOfIndexesSet.length; i++) {
-    arrayOfCountries[i] = response[arrayOfIndexesSet[i]];
-  }
-
+  const arrayOfCountries = Array.from(setOfCountries); 
   return arrayOfCountries;
 };
 

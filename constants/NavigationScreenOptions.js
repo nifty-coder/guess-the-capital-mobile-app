@@ -1,4 +1,3 @@
-import { useState, useEffect } from 'react';
 import { Ionicons } from '@expo/vector-icons';
 import Colors from '../constants/Colors';
 
@@ -11,9 +10,7 @@ const defaultStyles = {
 
 const BottomTabsNavigationScreenOptions = ({ route }) => ({
     ...defaultStyles,
-    unmountOnBlur: true,
     tabBarStyle: {
-      borderTopColor: 'rgba(0, 0, 0, .2)',    
       backgroundColor: Colors.appTheme.orange
     },
     tabBarLabelStyle: { fontSize: 14 },
@@ -23,7 +20,7 @@ const BottomTabsNavigationScreenOptions = ({ route }) => ({
   
       if (route.name === 'Home') {
         iconName = focused ? 'home' : 'home-outline';
-      } else if (route.name === 'Wins') {
+      } else if (route.name === 'Score') {
         iconName = focused ? 'flag' : 'flag-outline';
       }
 

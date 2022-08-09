@@ -2,7 +2,7 @@ import { StyleSheet, View } from 'react-native';
 import Colors from '../constants/Colors';
 import CustomButton from '../components/CustomButton';
 
-const Answers = ({ index, randomizedAnswer, onAnswerClickHandler }) => {
+const Answers = ({ index, disabled, randomizedAnswer, onAnswerClickHandler }) => {
   let labelText;
   switch (index) {
    case 0:
@@ -24,7 +24,8 @@ const Answers = ({ index, randomizedAnswer, onAnswerClickHandler }) => {
   return (
   <View key={index} style={styles.answer}>
     <CustomButton 
-      style={{ backgroundColor: Colors.appTheme.reddish }}
+      disabled={disabled}
+      bgColor={Colors.appTheme.reddish}
       textColor={Colors.white}
       label={labelText}
       buttonText={randomizedAnswer} 
@@ -37,7 +38,7 @@ export default Answers;
 
 const styles = StyleSheet.create({
     answer: { 
-      marginBottom: 15, 
+      marginBottom: 8, 
       borderRadius: 5 
     }
 });

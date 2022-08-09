@@ -1,29 +1,26 @@
 import { useState } from 'react';
-import { Alert, Dimensions, StyleSheet, TextInput, View } from 'react-native';
+import { Dimensions, StyleSheet, TextInput, View } from 'react-native';
 import BadWordsList from 'badwords-list';
 import BadWordsFilter from 'bad-words';
 import HindiBadWordsFilter from 'profanity-hindi';
 import Colors from '../constants/Colors';
 import CustomButton from '../components/CustomButton';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 function HomeIntroScreen({ navigation }) {
   const [playerName, setPlayerName] = useState('');
- 
-  function playGameHandler() {
-    let EnglishBadWordsFilter = new BadWordsFilter(BadWordsList.array);
-    if(
-      (playerName.includes('<') && (playerName.includes('/>') 
-      || playerName.includes('>'))) || (playerName.trim() === '')
-      || (EnglishBadWordsFilter.isProfane(playerName)) 
-      || (HindiBadWordsFilter.isMessageDirty(playerName))
-    ) {
-      Alert.alert("Invalid Name!", "Enter a proper name.", [{ text: 'Okay' }]);
-      setPlayerName('');
-      return;
-    }
+  let EnglishBadWordsFilter = new BadWordsFilter(BadWordsList.array);
+  let playerNameFitOrNotForSubmission = (
+    (playerName.includes('<') || (playerName.includes('/>'))) 
+    || (playerName.includes('>')) || (playerName.trim() === '') 
+    || (EnglishBadWordsFilter.isProfane(playerName)) 
+    || (HindiBadWordsFilter.isMessageDirty(playerName))
+  );
 
-    navigation.navigate("HomeGame", { playerName });
-    setPlayerName('');
+  async function playGameHandler() {    
+   await AsyncStorage.setItem("player", playerName);
+   navigation.navigate("Home", { screen: "HomeGame", initial: true });
+   setPlayerName('');
   };
 
   return (
@@ -38,7 +35,8 @@ function HomeIntroScreen({ navigation }) {
       </View>
       
       <CustomButton 
-      style={{ backgroundColor: Colors.black }}
+      disabled={playerNameFitOrNotForSubmission}
+      bgColor={Colors.black}
       textColor={Colors.appTheme.orange}
       buttonText="Play Game" 
       onPress={playGameHandler} />
@@ -47,7 +45,6 @@ function HomeIntroScreen({ navigation }) {
 };
 
 export default HomeIntroScreen;
-
 const styles = StyleSheet.create({
   container: {
     flex: 1
