@@ -11,12 +11,13 @@ import {
 import Colors from './constants/Colors';
 import HomeIntroScreen from './screens/HomeIntroScreen';
 import HomeGameScreen from './screens/HomeGameScreen';
-import WinsScreen from './screens/WinsScreen';
+import ScoreScreen from './screens/ScoreScreen';
 import VictoryScreen from './screens/VictoryScreen';
 
 const NativeStack = createNativeStackNavigator();
 function GameStackNavigator() {
   const [enteredPlayerName, setEnteredPlayerName] = useState();
+  
   useEffect(() => {
     const loadPlayer = async () => {
       let player = await AsyncStorage.getItem("player");
@@ -45,7 +46,7 @@ function GameStackNavigator() {
 function ScoreStackNavigator() {
   return (
     <NativeStack.Navigator screenOptions={NativeStackNavigationScreenOptions}>
-      <NativeStack.Screen name="Wins" component={WinsScreen} />
+      <NativeStack.Screen name="Score Summary" component={ScoreScreen} />
     </NativeStack.Navigator>
   );
 };

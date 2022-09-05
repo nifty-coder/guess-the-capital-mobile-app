@@ -2,13 +2,14 @@ import { useEffect, useLayoutEffect, useState } from 'react';
 import { StyleSheet, Pressable, Text, View, BackHandler } from 'react-native';
 import { Ionicons, AntDesign } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import 'react-native-get-random-values';
 import { 
   fetchCountriesAndReturnRandomCountries, 
   fetchAnswers 
 } from '../constants/Data';
+import Colors from '../constants/Colors';
 import CountryCard from '../components/CountryCard';
 import Answers from '../components/Answers';
-import Colors from '../constants/Colors';
 
 function HomeGameScreen({ navigation }) {
   const [playerName, setPlayerName] = useState();
@@ -19,6 +20,9 @@ function HomeGameScreen({ navigation }) {
   const [isQuestionAnswered, setIsQuestionAnswered] = useState(false);
   const [wonText, setWonText] = useState('');
   const [numberOfAttempts, setNumberOfAttempts] = useState(0);
+  const [numberOfGames, setNumberOfGames] = useState();
+  const [numberOfCorrectAnswers, setNumberOfCorrectAnswers] = useState(0);
+  let correctAnsCt = numberOfCorrectAnswers;
 
   useLayoutEffect(() => {
     const exitApp = async () => {
@@ -26,7 +30,7 @@ function HomeGameScreen({ navigation }) {
     };
 
     const clearData = async () => {
-      const keys = ['player', 'numAttempts', 'wins', 'losses'];
+      const keys = ['player', 'numAttempts', 'numGames', 'gameHistory'];
       await AsyncStorage.multiRemove(keys, (err) => {
         if(!err) {
           setTimeout(() => {
@@ -54,8 +58,17 @@ function HomeGameScreen({ navigation }) {
   }, [navigation]);
 
   async function loadData() {
+    let numGames = await AsyncStorage.getItem("numGames").then((res) => {
+      if (res) {
+        return +res;
+      } else return 1;
+    });    
+
+    setNumberOfGames(numGames);
+
     const countriesResult = await fetchCountriesAndReturnRandomCountries();
     setRandomizedCountry(countriesResult[0]);      
+
     const answersResult = await fetchAnswers(countriesResult);
     setRandomizedAnswers(answersResult);  
     
@@ -71,6 +84,7 @@ function HomeGameScreen({ navigation }) {
          return prevNumber;
       }
     });
+    
     setDisabled(false);
     setIsCorrect(false);
     setWonText('');
@@ -91,15 +105,37 @@ function HomeGameScreen({ navigation }) {
     unsubscribe();
     setRandomizedCountry({});
     setRandomizedAnswers([]);
+    setWonText('');
    };
   }, [navigation]);
   
   async function checkIfGameDone(numAtts) {
     if (numAtts % 10 === 0) {
+      let gameHistory = await AsyncStorage.getItem("gameHistory").then((res) => {
+        if(res && res !== 1) {
+          return JSON.parse(res);
+        } else return [];
+      });
+    
+      let gameData = {
+        gameNum: numberOfGames,
+        correctAns: correctAnsCt,
+        wrongAns: correctAnsCt === 10 ? 0 : 10 - correctAnsCt
+      };
+      gameHistory.push(gameData);
+      await AsyncStorage.setItem("gameHistory", JSON.stringify(gameHistory));
+      await AsyncStorage.setItem("numGames", JSON.stringify(numberOfGames + 1));
+      
+      setNumberOfCorrectAnswers(0); 
       setTimeout(() => {
-        navigation.navigate("GameVictory");
+        navigation.navigate(
+          "GameVictory", 
+          { 
+            participationType: correctAnsCt === 10 ? false : true 
+          }
+        );
+        setNumberOfAttempts(0);  
       }, 1500);
-      setNumberOfAttempts(0);
     } else {
       setTimeout(() => {
        loadData();
@@ -113,34 +149,27 @@ function HomeGameScreen({ navigation }) {
     && answer.every((value, index) => value === correctAnswer[index]);
  
     setIsQuestionAnswered(true);
- 
-    if(correct) {
-     setDisabled(true);
-     setIsCorrect(true);
-    
-     let wins = await AsyncStorage.getItem("wins").then((res) => {
-        if (res && res !== 1) {
-          return JSON.parse(res);
-        } else return [];
-      });
 
-      wins.push(randomizedCountry);
-      await AsyncStorage.setItem("wins", JSON.stringify(wins));
-      setWonText(`Woohoo! Good job, ${playerName}!`);
-      await checkIfGameDone(numberOfAttempts);
+    if(correct) {
+     setDisabled(true); 
+     setIsCorrect(true);  
+     correctAnsCt++;
+     setNumberOfCorrectAnswers((prevNumber) => { 
+        switch(correct) {
+          case true:
+           return prevNumber + 1;
+          case false:
+            return prevNumber;
+          default:
+          return prevNumber;
+        }
+      });
+     setWonText(`Woohoo! Good job, ${playerName}!`);
+     await checkIfGameDone(numberOfAttempts);
     } else {   
       setDisabled(true);
       setIsCorrect(false);
 
-      let losses = await AsyncStorage.getItem("losses").then((res) => {
-        if (res && res !== 1) {
-          return JSON.parse(res);
-        } else return [];
-      });
-
-      losses.push(randomizedCountry);
-      await AsyncStorage.setItem("losses", JSON.stringify(losses));
-      
       setWonText(`Oops, it is wrong! Correct answer is ${correctAnswer}.`);
       await checkIfGameDone(numberOfAttempts);
     }

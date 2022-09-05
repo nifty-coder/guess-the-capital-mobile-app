@@ -5,7 +5,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import CustomButton from '../components/CustomButton';
 import Colors from '../constants/Colors';
 
-function VictoryScreen({ navigation }) {
+function VictoryScreen({ navigation, route }) {
   const [uri, setUri] = useState('https://c.tenor.com/oGoY4h0pGYUAAAAj/updatess.gif');
   const [playerName, setPlayerName] = useState('');
 
@@ -30,10 +30,17 @@ function VictoryScreen({ navigation }) {
   }, [navigation]);
 
   useEffect(() => {
-    const link = 'https://i.ibb.co/Wy8Z2bM/trophygtc.jpg';
+    const link = (
+     'https://i.ibb.co' +
+     route.params.participationType === true 
+     ? '/Wy8Z2bM/trophygtc.jpg' 
+     : '/DtJtV7V/trophy.jpg'
+    );  
+
     setTimeout(() => {
       setUri(link);
     }, 100);
+    
     (async () => {
       let player = await AsyncStorage.getItem("player");
       setPlayerName(player);
