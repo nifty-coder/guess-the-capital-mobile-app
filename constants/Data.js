@@ -37,7 +37,7 @@ export const getContinentMap = (continent) => {
 };
 
 export const fetchRandomCountries = () => {
-  const response = useContext(CountriesContext);
+  const { response, deleteCountry } = useContext(CountriesContext);
   const setOfCountries = new Set();
   while(setOfCountries.size < 4) {
     let randomIndex = Math.floor(Math.random() * response.length + 1);
@@ -52,7 +52,8 @@ export const fetchRandomCountries = () => {
     setOfCountries.add(response[randomIndex]);
   }
 
-  const arrayOfCountries = Array.from(setOfCountries); 
+  const arrayOfCountries = Array.from(setOfCountries);
+  deleteCountry(arrayOfCountries[0]); 
   return arrayOfCountries;
 };
 

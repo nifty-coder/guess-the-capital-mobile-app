@@ -22,8 +22,20 @@ export const CountriesContextProvider = (props) => {
         })();
     }, []);
 
+    const deleteFromCountriesList = (countryToRemove) => {
+        countriesList.filter(item => console.log(item[countryToRemove]));
+        // const updatedList = countriesList.filter(item => item.name !== );
+        // setCountriesList(updatedList);
+    };
+
     return (
-      <CountriesContext.Provider value={countriesList}>
+      <CountriesContext.Provider 
+      value={
+        { 
+          response: countriesList, 
+          deleteCountry: deleteFromCountriesList 
+        }
+      }>
         {props.children}
       </CountriesContext.Provider>
     );
