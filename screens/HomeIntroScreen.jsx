@@ -17,7 +17,7 @@ function HomeIntroScreen({ navigation }) {
     || (HindiBadWordsFilter.isMessageDirty(playerName))
   );
 
-  async function playGameHandler() {    
+  async function playGameHandler() {
    await AsyncStorage.setItem("player", playerName);
    navigation.navigate("Home", { screen: "HomeGame", initial: true });
    setPlayerName('');
@@ -45,6 +45,7 @@ function HomeIntroScreen({ navigation }) {
 };
 
 export default HomeIntroScreen;
+
 const styles = StyleSheet.create({
   container: {
     flex: 1
@@ -52,13 +53,14 @@ const styles = StyleSheet.create({
   inputContainer: {
     height: 70,
     paddingHorizontal: 4,
-    paddingTop: Dimensions.get('window').width * 0.65,
+    paddingTop: Dimensions.get('window').width * 0.55,
     paddingBottom: Dimensions.get('window').width * 0.2
   },
   input: {
     backgroundColor: Colors.appTheme.darkgreen,
     textAlign: "center",
     color: Colors.white,
+    fontSize: 18,
     height: 70,
     paddingLeft: 15,
     paddingRight: 15

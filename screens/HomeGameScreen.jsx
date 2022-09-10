@@ -13,6 +13,7 @@ import Answers from '../components/Answers';
 
 function HomeGameScreen({ navigation }) {
   const [playerName, setPlayerName] = useState();
+  let name;
   const [randomizedCountry, setRandomizedCountry] = useState({});
   const [randomizedAnswers, setRandomizedAnswers] = useState([]);
   const [disabled, setDisabled] = useState(false);
@@ -23,39 +24,6 @@ function HomeGameScreen({ navigation }) {
   const [numberOfGames, setNumberOfGames] = useState();
   const [numberOfCorrectAnswers, setNumberOfCorrectAnswers] = useState(0);
   let correctAnsCt = numberOfCorrectAnswers;
-
-  useLayoutEffect(() => {
-    const exitApp = async () => {
-      BackHandler.exitApp();
-    };
-
-    const clearData = async () => {
-      const keys = ['player', 'numAttempts', 'numGames', 'gameHistory'];
-      await AsyncStorage.multiRemove(keys, (err) => {
-        if(!err) {
-          setTimeout(() => {
-          navigation.navigate("Home", { screen: "HomeIntro", initial: true });
-          }, 1000);    
-        } else {
-          Alert.alert("Something went wrong!", "Please try again.", [{ text: 'Okay' }]);
-        }
-      });
-    };
-
-    navigation.setOptions({
-      title: "Guess The Capital",
-      headerLeft: () => (
-        <Pressable android_ripple={{ color: '#fff' }} onPress={exitApp}>
-          <Ionicons name="close-circle" size={36} color="black" />
-        </Pressable>
-      ),
-      headerRight: () => (
-        <Pressable android_ripple={{ color: '#fff' }} onPress={clearData}>
-          <AntDesign name="deleteuser" size={36} color="black" />
-        </Pressable>
-      )
-    });
-  }, [navigation]);
 
   async function loadData() {
     let numGames = await AsyncStorage.getItem("numGames").then((res) => {
@@ -94,6 +62,7 @@ function HomeGameScreen({ navigation }) {
    const unsubscribe = (() => {
      const subscription = navigation.addListener('focus', async () => {  
       let player = await AsyncStorage.getItem("player");
+      name = player;
       setPlayerName(player);
       await loadData();
     });
@@ -107,6 +76,53 @@ function HomeGameScreen({ navigation }) {
     setRandomizedAnswers([]);
     setWonText('');
    };
+  }, [navigation]);
+
+  useLayoutEffect(() => {
+    const exitApp = async () => {
+      BackHandler.exitApp();
+    };
+
+    const clearData = async () => {
+      const keys = ['player', 'numAttempts', 'numGames', 'gameHistory'];
+      await AsyncStorage.multiRemove(keys, (err) => {
+        if(!err) {
+          setTimeout(() => {
+          navigation.navigate("Home", { screen: "HomeIntro", initial: true });
+          }, 1000);    
+        } else {
+          Alert.alert("Something went wrong!", "Please try again.", [{ text: 'Okay' }]);
+        }
+      });
+    };
+
+    navigation.setOptions({
+      title: "Guess The Capital",
+      headerLeft: () => (
+        <Pressable android_ripple={{ color: '#fff' }} onPress={exitApp}>
+          <Ionicons 
+          style={{ alignSelf: 'center' }} 
+          name="close-circle" 
+          size={36} 
+          color="black" 
+          />
+          <Text style={{ textAlign: 'center' }}>Exit App</Text>
+        </Pressable>
+      ),
+      headerRight: () => (
+        <Pressable 
+        android_ripple={{ color: '#fff' }} 
+        onPress={clearData}>
+          <AntDesign 
+          style={{ alignSelf: 'center' }} 
+          name="deleteuser" 
+          size={36} 
+          color="black" 
+          />
+          <Text style={{ textAlign: 'center' }}>{name}</Text>
+        </Pressable>
+      )
+    });
   }, [navigation]);
   
   async function checkIfGameDone(numAtts) {

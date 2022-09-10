@@ -45,19 +45,19 @@ export async function fetchCountriesAndReturnRandomCountries() {
   }).then((res) => res.json()); 
 
   if(!response) {
-    return;
+    throw new Error("Something went wrong.");
   } 
   
   const setOfCountries = new Set();
   while(setOfCountries.size < 4) {
     let randomIndex = Math.floor(Math.random() * response.length + 1);
     if(
-      response[randomIndex].capital === undefined || response[randomIndex].population === 0 
+      ("capital" in response[randomIndex]) === false 
+      || response[randomIndex].population === 0 
       || response[randomIndex].continents[0] === Antarctica
     ) {
       continue;
     }
-
     setOfCountries.add(response[randomIndex]);
   }
 
@@ -77,10 +77,10 @@ function shuffle(array = []) {
   return array;
 };
 export async function fetchAnswers(countryList) {
-  const correctAnswer = countryList[0].capital?.map((cap) => cap).join(", ");
-  const firstAnswer = countryList[1].capital?.map((cap) => cap).join(", ");
-  const secondAnswer = countryList[2].capital?.map((cap) => cap).join(", ");
-  const thirdAnswer = countryList[3].capital?.map((cap) => cap).join(", ");
+  const correctAnswer = countryList[0].capital.map((cap) => cap).join(", ");
+  const firstAnswer = countryList[1].capital.map((cap) => cap).join(", ");
+  const secondAnswer = countryList[2].capital.map((cap) => cap).join(", ");
+  const thirdAnswer = countryList[3].capital.map((cap) => cap).join(", ");
   const answersArray = [correctAnswer, firstAnswer, secondAnswer, thirdAnswer];
   return shuffle(answersArray);
 };

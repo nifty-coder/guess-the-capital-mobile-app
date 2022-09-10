@@ -63,7 +63,8 @@ function App() {
         component={GameStackNavigator}
         options={{
           headerShown: false,
-          tabBarActiveTintColor: Colors.appTheme.reddish
+          tabBarActiveTintColor: Colors.appTheme.darkblue,
+          unmountOnBlur: true
         }} />
 
         <AppBottomTabs.Screen 

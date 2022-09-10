@@ -18,27 +18,19 @@ function VictoryScreen({ navigation, route }) {
        onPress={() => navigation.navigate("HomeGame", { playerName: playerName })}>
         <Ionicons name="arrow-back" size={24} />
        </Pressable> 
-      ),
-      headerRight: () => (
-        <Pressable 
-        android_ripple={{ color: '#fff' }} 
-        onPress={() => navigation.navigate("HomeIntro")}>
-         <Ionicons name="md-home" size={24} />
-        </Pressable> 
-      ) 
+      )
     });
   }, [navigation]);
 
   useEffect(() => {
     const link = (
-     'https://i.ibb.co' +
      route.params.participationType === true 
      ? '/Wy8Z2bM/trophygtc.jpg' 
      : '/DtJtV7V/trophy.jpg'
     );  
 
     setTimeout(() => {
-      setUri(link);
+      setUri('https://i.ibb.co' + link);
     }, 100);
     
     (async () => {
@@ -51,23 +43,15 @@ function VictoryScreen({ navigation, route }) {
     <View style={styles.container}>
       <Image source={{ uri: uri }} style={styles.image} />
       <Text style={styles.text}>Great job, {playerName}!</Text>
-      <CustomButton 
-      disabled={false}
-      style={styles.playAgainButton} 
-      bgColor={Colors.appTheme.darkblue}
-      textColor={Colors.white} 
-      buttonText="Play another game"
-      onPress={() => navigation.navigate("HomeGame")} />
- 
       <View style={styles.buttonContainer}>
         <CustomButton 
         disabled={false}
-        style={styles.homeButton}
-        bgColor={Colors.appTheme.reddish} 
+        style={styles.playAgainButton} 
+        bgColor={Colors.appTheme.darkblue}
         textColor={Colors.white} 
-        buttonText="Go back to Home" 
-        onPress={() => navigation.navigate("HomeIntro")} />
-
+        buttonText="Play another game"
+        onPress={() => navigation.navigate("HomeGame")} />
+  
         <CustomButton 
         disabled={false}
         style={styles.scoreSummaryButton} 
@@ -99,16 +83,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row'
   },
   playAgainButton: {
-    width: 150,
-    marginTop: 4  
-  },
-  homeButton: {
-    width: 150,
-    marginTop: 6
+    width: 200,
+    marginTop: 4,
+    marginRight: 5
   },
   scoreSummaryButton: {
     width: 150,
-    marginTop: 6,
-    marginLeft: 2
+    marginTop: 4,
+    marginLeft: 3
   }
 });

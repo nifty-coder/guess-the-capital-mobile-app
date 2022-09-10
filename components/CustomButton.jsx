@@ -38,12 +38,13 @@ const styles = StyleSheet.create({
     pressable: {
      borderRadius: 90,
      elevation: 10,
-     borderWidth: 3,
-     marginHorizontal: 66,
-     height: 30
+     borderWidth: 2,
+     marginHorizontal: 70,
+     height: 40
     },
     buttonText: {
+      paddingTop: 4,
       textAlign: 'center',
-      fontSize: 14.5
+      fontSize: 18
     }
 });

@@ -1,40 +1,68 @@
 import { useEffect, useLayoutEffect, useState } from 'react';
-import { StyleSheet, Pressable, Text, Image, View, FlatList, Alert } from 'react-native';
+import { 
+  RefreshControl, 
+  StyleSheet, 
+  Pressable, 
+  Text, 
+  Image, 
+  View, 
+  FlatList, 
+  Alert 
+} from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Colors from '../constants/Colors';
 import LoadingGif from '../assets/loadingWins.gif';
 import ScoreCard from '../components/ScoreCard';
 
-function ScoreScreen({ navigation }) {
+function ScoreScreen({ navigation }) {  
+  let refreshing = false;
   let data, player;
   const [gameHistory, setGameHistory] = useState([]);
   const [user, setUser] = useState();
 
   useLayoutEffect(() => {
     const clearData = async () => {
-      await AsyncStorage.removeItem("gameHistory"); 
-      setGameHistory(null);
+      Alert.alert(
+        "Are you sure?", 
+        "This will remove your game history but still keep your name.",
+        [
+          { text: 'No' },
+          {
+            text: 'Yes',
+            onPress: async () => {
+              await AsyncStorage.removeItem("gameHistory"); 
+              setGameHistory(null);        
+            }
+          }
+        ]
+      ); 
     };
-
-    navigation.setOptions({
-      headerRight: () => (
-        <Pressable 
-        style={{ marginRight: 15 }}
-        android_ripple={{ color: '#fff' }} 
-        onPress={clearData}>
-         <MaterialIcons name="clear-all" size={32} />
-        </Pressable> 
-      )
-    });
+      navigation.setOptions({
+        headerRight: () => (
+          <Pressable 
+          style={{ marginRight: 15 }}
+          android_ripple={{ color: '#fff' }} 
+          onPress={clearData}>
+           <MaterialIcons 
+           style={{ alignSelf: 'center' }} 
+           name="delete-forever" 
+           size={32} 
+           color="black"
+           />
+          <Text style={{ textAlign: 'center' }}>Clear Games</Text>
+          </Pressable> 
+        )
+      });
   }, [navigation]);
 
   const loadAsyncStorageData = async () => {
+    refreshing = true;
     data = await AsyncStorage.getItem("gameHistory").then((res) => {
-      let parsedData = JSON.parse(res);
-      return parsedData;
+      return JSON.parse(res);
     }); 
     player = await AsyncStorage.getItem("player");
+    refreshing = false;
   };
   useEffect(() => {
    loadAsyncStorageData()
@@ -63,18 +91,30 @@ function ScoreScreen({ navigation }) {
     );
    };
   
-  const jsx = gameHistory ? (
-   <>
-    <Text style={styles.text}>Here is your score summary, {user}:</Text>
-    <FlatList 
-    data={gameHistory}
-    renderItem={({ item, index }) => renderGameHistory(item, index)} 
-    />
-    <Text style={styles.text}>That's it so far!</Text>
-   </>
-  ) : <Image source={LoadingGif} style={styles.loadingGif} />;
+  const jsx = () => {
+    refreshing = true;
+    if(gameHistory) {
+      refreshing = false;
+      return (
+        <>
+         <Text style={styles.text}>Here is your score summary, {user}:</Text>
+         <FlatList 
+         data={gameHistory}
+         renderItem={({ item, index }) => renderGameHistory(item, index)} 
+         refreshing={refreshing}
+         refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={loadAsyncStorageData} />
+        } />
+         <Text style={styles.text}>That's it so far!</Text>
+        </>
+      );
+    } else {
+      refreshing = false;
+      return <Image source={LoadingGif} style={styles.loadingGif} />;
+    }
+  };
 
-  return <View>{jsx}</View>;
+  return <View>{jsx()}</View>;
 };
 
 export default ScoreScreen;
