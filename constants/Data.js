@@ -1,4 +1,5 @@
-const API_INITIAL_LINK = 'https://restcountries.com/v3.1';
+import { useContext } from "react";
+import { CountriesContext } from "./CountriesContext";
 
 const Asia = "Asia";
 const NorthAmerica = "North America";
@@ -7,7 +8,7 @@ const Europe = "Europe";
 const Africa = "Africa";
 const Oceania = "Oceania";
 const Antarctica = "Antarctica";
-export function getContinentMap(continent) {
+export const getContinentMap = (continent) => {
   let mapLink;
 
   switch(continent) {
@@ -35,22 +36,12 @@ export function getContinentMap(continent) {
   return mapLink;
 };
 
-export async function fetchCountriesAndReturnRandomCountries() {
-  const response = await fetch(API_INITIAL_LINK + '/all', {
-    method: 'GET',
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json"
-    }
-  }).then((res) => res.json()); 
-
-  if(!response) {
-    throw new Error("Something went wrong.");
-  } 
-  
+export const fetchRandomCountries = () => {
+  const response = useContext(CountriesContext);
   const setOfCountries = new Set();
   while(setOfCountries.size < 4) {
     let randomIndex = Math.floor(Math.random() * response.length + 1);
+ 
     if(
       ("capital" in response[randomIndex]) === false 
       || response[randomIndex].population === 0 
@@ -65,7 +56,7 @@ export async function fetchCountriesAndReturnRandomCountries() {
   return arrayOfCountries;
 };
 
-function shuffle(array = []) {
+const shuffle = (array = []) => {
   let currentIndex = array.length, randomIndex;
 
   while (currentIndex != 0) {
@@ -76,7 +67,8 @@ function shuffle(array = []) {
 
   return array;
 };
-export async function fetchAnswers(countryList) {
+
+export const fetchAnswers = (countryList) => {
   const correctAnswer = countryList[0].capital.map((cap) => cap).join(", ");
   const firstAnswer = countryList[1].capital.map((cap) => cap).join(", ");
   const secondAnswer = countryList[2].capital.map((cap) => cap).join(", ");

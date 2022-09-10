@@ -4,6 +4,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { CountriesContextProvider } from './constants/CountriesContext';
 import { 
   BottomTabsNavigationScreenOptions, 
   NativeStackNavigationScreenOptions 
@@ -15,7 +16,7 @@ import ScoreScreen from './screens/ScoreScreen';
 import VictoryScreen from './screens/VictoryScreen';
 
 const NativeStack = createNativeStackNavigator();
-function GameStackNavigator() {
+const GameStackNavigator = () => {
   const [enteredPlayerName, setEnteredPlayerName] = useState();
   
   useEffect(() => {
@@ -43,7 +44,7 @@ function GameStackNavigator() {
   );
 };
 
-function ScoreStackNavigator() {
+const ScoreStackNavigator = () => {
   return (
     <NativeStack.Navigator screenOptions={NativeStackNavigationScreenOptions}>
       <NativeStack.Screen name="Score Summary" component={ScoreScreen} />
@@ -52,9 +53,9 @@ function ScoreStackNavigator() {
 };
 
 const AppBottomTabs = createBottomTabNavigator();
-function App() {
+const App = () => {
   return (
-    <>
+    <CountriesContextProvider>
      <StatusBar translucent backgroundColor="transparent" style="dark" />
      <NavigationContainer>
       <AppBottomTabs.Navigator screenOptions={BottomTabsNavigationScreenOptions}>
@@ -78,7 +79,7 @@ function App() {
         }} />
       </AppBottomTabs.Navigator> 
      </NavigationContainer>
-    </>
+    </CountriesContextProvider>
   );
 };
 

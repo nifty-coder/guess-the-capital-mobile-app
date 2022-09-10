@@ -3,11 +3,11 @@ import { Dimensions, StyleSheet, TextInput, View } from 'react-native';
 import BadWordsList from 'badwords-list';
 import BadWordsFilter from 'bad-words';
 import HindiBadWordsFilter from 'profanity-hindi';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import Colors from '../constants/Colors';
 import CustomButton from '../components/CustomButton';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
-function HomeIntroScreen({ navigation }) {
+const HomeIntroScreen = ({ navigation }) => {
   const [playerName, setPlayerName] = useState('');
   let EnglishBadWordsFilter = new BadWordsFilter(BadWordsList.array);
   let playerNameFitOrNotForSubmission = (
@@ -17,7 +17,7 @@ function HomeIntroScreen({ navigation }) {
     || (HindiBadWordsFilter.isMessageDirty(playerName))
   );
 
-  async function playGameHandler() {
+  const playGameHandler = async () => {
    await AsyncStorage.setItem("player", playerName);
    navigation.navigate("Home", { screen: "HomeGame", initial: true });
    setPlayerName('');

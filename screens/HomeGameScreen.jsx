@@ -2,16 +2,12 @@ import { useEffect, useLayoutEffect, useState } from 'react';
 import { StyleSheet, Pressable, Text, View, BackHandler } from 'react-native';
 import { Ionicons, AntDesign } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import 'react-native-get-random-values';
-import { 
-  fetchCountriesAndReturnRandomCountries, 
-  fetchAnswers 
-} from '../constants/Data';
+import { fetchRandomCountries, fetchAnswers } from '../constants/Data';
 import Colors from '../constants/Colors';
 import CountryCard from '../components/CountryCard';
 import Answers from '../components/Answers';
 
-function HomeGameScreen({ navigation }) {
+const HomeGameScreen = ({ navigation }) => {
   const [playerName, setPlayerName] = useState();
   let name;
   const [randomizedCountry, setRandomizedCountry] = useState({});
@@ -25,19 +21,18 @@ function HomeGameScreen({ navigation }) {
   const [numberOfCorrectAnswers, setNumberOfCorrectAnswers] = useState(0);
   let correctAnsCt = numberOfCorrectAnswers;
 
-  async function loadData() {
+  const loadData = async () => {
     let numGames = await AsyncStorage.getItem("numGames").then((res) => {
       if (res) {
         return +res;
       } else return 1;
     });    
-
     setNumberOfGames(numGames);
 
-    const countriesResult = await fetchCountriesAndReturnRandomCountries();
+    const countriesResult = fetchRandomCountries();
     setRandomizedCountry(countriesResult[0]);      
 
-    const answersResult = await fetchAnswers(countriesResult);
+    const answersResult = fetchAnswers(countriesResult);
     setRandomizedAnswers(answersResult);  
     
     setNumberOfAttempts((prevNumber) => { 
@@ -125,7 +120,7 @@ function HomeGameScreen({ navigation }) {
     });
   }, [navigation]);
   
-  async function checkIfGameDone(numAtts) {
+  const checkIfGameDone = async (numAtts) => {
     if (numAtts % 10 === 0) {
       let gameHistory = await AsyncStorage.getItem("gameHistory").then((res) => {
         if(res && res !== 1) {
@@ -191,7 +186,7 @@ function HomeGameScreen({ navigation }) {
     }
   };
   
-  function renderCountry() {
+  const renderCountry = () => {
     const { 
       capital, 
       flag, 
@@ -213,7 +208,7 @@ function HomeGameScreen({ navigation }) {
     );
   };
 
-  function renderAnswers() {
+  const renderAnswers = () => {
     return randomizedAnswers.map((randomizedAnswer, i) => (
       <Answers
       key={i}
@@ -241,6 +236,7 @@ function HomeGameScreen({ navigation }) {
 };
 
 export default HomeGameScreen;
+
 const styles = StyleSheet.create({
   text: { 
     fontSize: 15, 
