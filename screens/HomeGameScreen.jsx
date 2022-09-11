@@ -1,5 +1,5 @@
 import { useEffect, useLayoutEffect, useState } from 'react';
-import { StyleSheet, Pressable, Text, View, BackHandler } from 'react-native';
+import { Alert, StyleSheet, Pressable, Text, View, BackHandler } from 'react-native';
 import { Ionicons, AntDesign } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useFetchRandomCountries, fetchAnswers } from '../utils-async/Data';
@@ -9,8 +9,7 @@ import Answers from '../components/Answers';
 
 const HomeGameScreen = ({ navigation }) => {
   const { fetchRandomCountries } = useFetchRandomCountries();
-  const [playerName, setPlayerName] = useState();
-  let name;
+  const [playerName, setPlayerName] = useState('');
   const [randomizedCountry, setRandomizedCountry] = useState({});
   const [randomizedAnswers, setRandomizedAnswers] = useState([]);
   const [disabled, setDisabled] = useState(false);
@@ -55,16 +54,18 @@ const HomeGameScreen = ({ navigation }) => {
   };
 
   useEffect(() => {
-   const unsubscribe = (() => {
-     const subscription = navigation.addListener('focus', async () => {  
+    (async () => {
       let player = await AsyncStorage.getItem("player");
-      name = player;
-      setPlayerName(player);
-      await loadData();
-    });
+      setPlayerName(player);  
+    })();
 
-    return subscription;
-   })();
+    const unsubscribe = (() => {    
+      const subscription = navigation.addListener('focus', async () => {  
+        await loadData();
+      });
+  
+      return subscription;
+    })();
      
    return () => {
     unsubscribe();
@@ -80,16 +81,28 @@ const HomeGameScreen = ({ navigation }) => {
     };
 
     const clearData = async () => {
-      const keys = ['player', 'numAttempts', 'numGames', 'gameHistory'];
-      await AsyncStorage.multiRemove(keys, (err) => {
-        if(!err) {
-          setTimeout(() => {
-          navigation.navigate("Home", { screen: "HomeIntro", initial: true });
-          }, 1000);    
-        } else {
-          Alert.alert("Something went wrong!", "Please try again.", [{ text: 'Okay' }]);
-        }
-      });
+      Alert.alert(
+        "Are you sure?", 
+        "This will remove your game history and require you to enter a name again.",
+        [
+          { text: 'No' },
+          {
+            text: 'Yes',
+            onPress: async () => {
+              const keys = ['player', 'numAttempts', 'numGames', 'gameHistory'];
+              await AsyncStorage.multiRemove(keys, (err) => {
+                if(!err) {
+                  setTimeout(() => {
+                  navigation.navigate("Home", { screen: "HomeIntro", initial: true });
+                  }, 1000);    
+                } else {
+                  Alert.alert("Something went wrong!", "Please try again.", [{ text: 'Okay' }]);
+                }
+              });        
+            }
+          }
+        ]
+      ); 
     };
 
     navigation.setOptions({
@@ -115,7 +128,7 @@ const HomeGameScreen = ({ navigation }) => {
           size={36} 
           color="black" 
           />
-          <Text style={{ textAlign: 'center' }}>{name}</Text>
+          <Text style={{ textAlign: 'center' }}>{playerName}</Text>
         </Pressable>
       )
     });
