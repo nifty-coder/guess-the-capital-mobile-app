@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Image, Dimensions } from 'react-native';
 import { commafyNumber } from 'commafy-any-number';
 import Colors from '../constants/Colors';
-import { getContinentMap } from '../constants/Data';
+import { getContinentMap } from '../utils-async/Data';
 
 const CountryCard = (props) => {
   const { 

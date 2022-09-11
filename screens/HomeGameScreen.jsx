@@ -2,7 +2,7 @@ import { useEffect, useLayoutEffect, useState } from 'react';
 import { StyleSheet, Pressable, Text, View, BackHandler } from 'react-native';
 import { Ionicons, AntDesign } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useFetchRandomCountries, fetchAnswers } from '../constants/Data';
+import { useFetchRandomCountries, fetchAnswers } from '../utils-async/Data';
 import Colors from '../constants/Colors';
 import CountryCard from '../components/CountryCard';
 import Answers from '../components/Answers';
