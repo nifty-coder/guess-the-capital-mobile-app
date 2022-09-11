@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { CountriesContext } from "./CountriesContext";
+import { CountriesContext } from "./Context";
 
 const Asia = "Asia";
 const NorthAmerica = "North America";
@@ -36,26 +36,30 @@ export const getContinentMap = (continent) => {
   return mapLink;
 };
 
-export const fetchRandomCountries = () => {
+export const useFetchRandomCountries = () => {
   const { response, deleteCountry } = useContext(CountriesContext);
-  const setOfCountries = new Set();
-  while(setOfCountries.size < 4) {
-    let randomIndex = Math.floor(Math.random() * response.length + 1);
- 
-    if(
-      ("capital" in response[randomIndex]) === false 
-      || response[randomIndex].population === 0 
-      || response[randomIndex].continents[0] === Antarctica
-    ) {
-      continue;
+  const fetchRandomCountries = () => {
+    const setOfCountries = new Set();
+    while(setOfCountries.size < 4) {
+      let randomIndex = Math.floor(Math.random() * response.length + 1);
+   
+      if(
+        ("capital" in response[randomIndex]) === false 
+        || response[randomIndex].population === 0 
+        || response[randomIndex].continents[0] === Antarctica
+      ) {
+        continue;
+      }
+      setOfCountries.add(response[randomIndex]);
     }
-    setOfCountries.add(response[randomIndex]);
-  }
+  
+    const arrayOfCountries = Array.from(setOfCountries);
+    deleteCountry(arrayOfCountries[0]); 
+    return arrayOfCountries;  
+  };
 
-  const arrayOfCountries = Array.from(setOfCountries);
-  deleteCountry(arrayOfCountries[0]); 
-  return arrayOfCountries;
-};
+  return { fetchRandomCountries };
+ };
 
 const shuffle = (array = []) => {
   let currentIndex = array.length, randomIndex;

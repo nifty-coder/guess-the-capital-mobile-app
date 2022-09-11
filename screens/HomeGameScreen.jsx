@@ -2,12 +2,13 @@ import { useEffect, useLayoutEffect, useState } from 'react';
 import { StyleSheet, Pressable, Text, View, BackHandler } from 'react-native';
 import { Ionicons, AntDesign } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { fetchRandomCountries, fetchAnswers } from '../constants/Data';
+import { useFetchRandomCountries, fetchAnswers } from '../constants/Data';
 import Colors from '../constants/Colors';
 import CountryCard from '../components/CountryCard';
 import Answers from '../components/Answers';
 
 const HomeGameScreen = ({ navigation }) => {
+  const { fetchRandomCountries } = useFetchRandomCountries();
   const [playerName, setPlayerName] = useState();
   let name;
   const [randomizedCountry, setRandomizedCountry] = useState({});
@@ -20,7 +21,7 @@ const HomeGameScreen = ({ navigation }) => {
   const [numberOfGames, setNumberOfGames] = useState();
   const [numberOfCorrectAnswers, setNumberOfCorrectAnswers] = useState(0);
   let correctAnsCt = numberOfCorrectAnswers;
-
+  
   const loadData = async () => {
     let numGames = await AsyncStorage.getItem("numGames").then((res) => {
       if (res) {
@@ -28,13 +29,13 @@ const HomeGameScreen = ({ navigation }) => {
       } else return 1;
     });    
     setNumberOfGames(numGames);
-
+    
     const countriesResult = fetchRandomCountries();
     setRandomizedCountry(countriesResult[0]);      
 
     const answersResult = fetchAnswers(countriesResult);
     setRandomizedAnswers(answersResult);  
-    
+
     setNumberOfAttempts((prevNumber) => { 
       switch(isQuestionAnswered) {
         case true:
