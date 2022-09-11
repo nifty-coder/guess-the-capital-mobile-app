@@ -35,6 +35,7 @@ const HomeIntroScreen = ({ navigation }) => {
       </View>
       
       <CustomButton 
+      fontSize={18}
       disabled={playerNameFitOrNotForSubmission}
       bgColor={Colors.black}
       textColor={Colors.appTheme.orange}

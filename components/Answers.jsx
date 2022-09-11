@@ -24,6 +24,7 @@ const Answers = ({ index, disabled, randomizedAnswer, onAnswerClickHandler }) =>
   return (
   <View key={index} style={styles.answer}>
     <CustomButton 
+      fontSize={16}
       disabled={disabled}
       bgColor={Colors.appTheme.reddish}
       textColor={Colors.white}

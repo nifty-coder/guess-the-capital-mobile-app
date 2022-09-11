@@ -45,6 +45,7 @@ function VictoryScreen({ navigation, route }) {
       <Text style={styles.text}>Great job, {playerName}!</Text>
       <View style={styles.buttonContainer}>
         <CustomButton 
+        fontSize={16}
         disabled={false}
         style={styles.playAgainButton} 
         bgColor={Colors.appTheme.darkblue}
@@ -53,6 +54,7 @@ function VictoryScreen({ navigation, route }) {
         onPress={() => navigation.navigate("HomeGame")} />
   
         <CustomButton 
+        fontSize={16}
         disabled={false}
         style={styles.scoreSummaryButton} 
         bgColor={Colors.appTheme.darkgreen} 
@@ -90,6 +92,6 @@ const styles = StyleSheet.create({
   scoreSummaryButton: {
     width: 150,
     marginTop: 4,
-    marginLeft: 3
+    marginLeft: 7
   }
 });

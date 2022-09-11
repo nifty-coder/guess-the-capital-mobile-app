@@ -31,8 +31,8 @@ const HomeGameScreen = ({ navigation }) => {
     setNumberOfGames(numGames);
     
     const countriesResult = fetchRandomCountries();
-    setRandomizedCountry(countriesResult[0]);      
-
+    setRandomizedCountry(countriesResult[0]);
+    
     const answersResult = fetchAnswers(countriesResult);
     setRandomizedAnswers(answersResult);  
 
@@ -156,7 +156,7 @@ const HomeGameScreen = ({ navigation }) => {
   };
 
   const onAnswerClickHandler = async (answer) => {
-    const correctAnswer = randomizedCountry.capital.map((cap) => cap); 
+    const correctAnswer = Array.of(randomizedCountry.capital.map((cap) => cap).join(", ")); 
     const correct = answer.length === correctAnswer.length 
     && answer.every((value, index) => value === correctAnswer[index]);
  

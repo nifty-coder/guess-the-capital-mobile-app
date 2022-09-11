@@ -3,7 +3,7 @@ import Colors from '../constants/Colors';
 
 const CustomButton = (
   { 
-    style,
+    fontSize,
     onPress, 
     bgColor, 
     disabled, 
@@ -22,12 +22,11 @@ const CustomButton = (
         { 
           backgroundColor: bgColor,
           opacity: disabled ? 0.5 : 1
-        },
-        style
+        }
       ]
     }
     disabled={disabled}>
-      <Text style={[{ color: textColor }, styles.buttonText]}>{label} {buttonText}</Text>
+      <Text style={[{ color: textColor, fontSize: fontSize }, styles.buttonText]}>{label} {buttonText}</Text>
     </Pressable>
   );
 };
@@ -44,7 +43,6 @@ const styles = StyleSheet.create({
     },
     buttonText: {
       paddingTop: 4,
-      textAlign: 'center',
-      fontSize: 18
+      textAlign: 'center'
     }
 });

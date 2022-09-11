@@ -40,9 +40,10 @@ export const useFetchRandomCountries = () => {
   const { response, deleteCountry } = useContext(CountriesContext);
   const fetchRandomCountries = () => {
     const setOfCountries = new Set();
-    while(setOfCountries.size < 4) {
+    let firstIndex = -1;
+
+    while(setOfCountries.size < 4 && response) {
       let randomIndex = Math.floor(Math.random() * response.length + 1);
-   
       if(
         ("capital" in response[randomIndex]) === false 
         || response[randomIndex].population === 0 
@@ -51,10 +52,13 @@ export const useFetchRandomCountries = () => {
         continue;
       }
       setOfCountries.add(response[randomIndex]);
+      if (firstIndex === -1) {
+        firstIndex=randomIndex;
+      }
     }
   
     const arrayOfCountries = Array.from(setOfCountries);
-    deleteCountry(arrayOfCountries[0]); 
+    deleteCountry(firstIndex); 
     return arrayOfCountries;  
   };
 

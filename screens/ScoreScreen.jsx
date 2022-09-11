@@ -114,7 +114,7 @@ function ScoreScreen({ navigation }) {
     }
   };
 
-  return <View>{jsx()}</View>;
+  return <>{jsx()}</>;
 };
 
 export default ScoreScreen;

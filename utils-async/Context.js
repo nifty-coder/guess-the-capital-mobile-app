@@ -23,8 +23,8 @@ export const CountriesContextProvider = (props) => {
     }, []);
 
     const deleteFromCountriesList = (countryToRemove) => {
-        const updatedList = countriesList.filter(item => item !== countriesList[countryToRemove]);
-        setCountriesList(updatedList);
+      const updatedList = countriesList.filter(item => item !== countriesList[countryToRemove]);
+      setCountriesList(updatedList);
     };
 
     return (
