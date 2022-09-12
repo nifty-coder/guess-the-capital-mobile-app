@@ -1,5 +1,5 @@
 import { useContext, useState } from 'react';
-import { Dimensions, Image, StyleSheet, Text, TextInput, View } from 'react-native';
+import { Dimensions, Image, StyleSheet, Text, TextInput, View, PixelRatio } from 'react-native';
 import BadWordsList from 'badwords-list';
 import BadWordsFilter from 'bad-words';
 import HindiBadWordsFilter from 'profanity-hindi';
@@ -8,6 +8,19 @@ import { GameContext } from '../utils-async/Context';
 import Colors from '../constants/Colors';
 import CustomButton from '../components/CustomButton';
 import introToGameList from '../constants/IntroToGame';
+
+const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
+
+const scale = SCREEN_WIDTH / 320;
+
+const normalize = (size) => {
+  const newSize = size * scale;
+  if (Platform.OS === 'ios') {
+    return Math.round(PixelRatio.roundToNearestPixel(newSize));
+  } else {
+    return Math.round(PixelRatio.roundToNearestPixel(newSize)) - 2;
+  }
+};
 
 const HomeIntroScreen = ({ navigation }) => {
   const worldMapURL = 'https://tinyurl.com/sk-app-world-map';
@@ -43,7 +56,7 @@ const HomeIntroScreen = ({ navigation }) => {
       </View>
       
       <CustomButton 
-      fontSize={18}
+      fontSize={normalize(18)}
       disabled={playerFitOrNotForSubmission}
       bgColor={Colors.black}
       textColor={Colors.appTheme.orange}
@@ -83,7 +96,7 @@ const styles = StyleSheet.create({
   introText: {
     marginTop: '2%',
     textAlign: 'center',
-    fontSize: 18,
+    fontSize: normalize(18),
     fontWeight: 'bold'
   },
   inputContainer: {
@@ -96,7 +109,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.appTheme.blue,
     textAlign: "center",
     color: Colors.white,
-    fontSize: 18,
+    fontSize: normalize(18),
     height: 70,
     paddingLeft: 15,
     paddingRight: 15
@@ -113,6 +126,6 @@ const styles = StyleSheet.create({
   developerText: {
     marginTop: '0.4%',
     textAlign: "center",
-    fontSize: 16
+    fontSize: normalize(16)
   }
 });
