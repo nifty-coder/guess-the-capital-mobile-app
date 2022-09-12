@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "Guess The Capital App",
-    "slug": "guess-the-capital-app",
+    "name": "Quiz - Capital Cities of the World",
+    "slug": "quiz-capitals-game",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -17,12 +17,6 @@
     },
     "assetBundlePatterns": [
       "**/*"
-    ],
-    "android": {
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#FFFFFF"
-      }
-    }
+    ]
   }
 }
