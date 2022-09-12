@@ -48,7 +48,7 @@ function ScoreScreen({ navigation }) {
            style={{ alignSelf: 'center' }} 
            name="delete-forever" 
            size={32} 
-           color="black"
+           color={Colors.white}
            />
           <Text style={{ textAlign: 'center' }}>Clear Games</Text>
           </Pressable> 
