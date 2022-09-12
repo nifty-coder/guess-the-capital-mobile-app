@@ -104,8 +104,7 @@ function ScoreScreen({ navigation }) {
          refreshing={refreshing}
          refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={loadAsyncStorageData} />
-        } />
-         <Text style={styles.text}>That's it so far!</Text>
+         } />
         </>
       );
     } else {

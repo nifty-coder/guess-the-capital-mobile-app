@@ -1,4 +1,23 @@
 import { createContext, useEffect, useState } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
+export const GameContext = createContext();
+export const GameContextProvider = (props) => {
+  const [playerName, setPlayerName] = useState('');
+
+  useEffect(() => {
+    (async () => {
+      let player = await AsyncStorage.getItem("player");
+      setPlayerName(player);  
+    })();
+  });
+
+  return (
+    <GameContext.Provider value={{playerName: playerName, updatePlayerName: setPlayerName}}>
+      {props.children}
+    </GameContext.Provider>
+  );
+};
 
 export const CountriesContext = createContext();
 export const CountriesContextProvider = (props) => {

@@ -1,10 +1,10 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { CountriesContextProvider } from './utils-async/Context';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { CountriesContextProvider, GameContext, GameContextProvider } from './utils-async/Context';
 import { 
   BottomTabsNavigationScreenOptions, 
   NativeStackNavigationScreenOptions 
@@ -17,12 +17,13 @@ import VictoryScreen from './screens/VictoryScreen';
 
 const NativeStack = createNativeStackNavigator();
 const GameStackNavigator = () => {
-  const [enteredPlayerName, setEnteredPlayerName] = useState();
-  
+  const { enteredPlayerName } = useContext(GameContext);
+  const [asyncStoragePlayerName, setAsyncStoragePlayerName] = useState();  
+
   useEffect(() => {
     const loadPlayer = async () => {
       let player = await AsyncStorage.getItem("player");
-      setEnteredPlayerName(player);
+      setAsyncStoragePlayerName(player);
     };  
     loadPlayer();
   });
@@ -30,7 +31,9 @@ const GameStackNavigator = () => {
   return (
     <NativeStack.Navigator 
     screenOptions={NativeStackNavigationScreenOptions}
-    initialRouteName={!enteredPlayerName ? "HomeIntro" : "HomeGame"}>
+    initialRouteName={
+      (!enteredPlayerName && !asyncStoragePlayerName) ? "HomeIntro" : "HomeGame"
+    }>
       <NativeStack.Screen 
       name="HomeIntro" 
       component={HomeIntroScreen}
@@ -55,6 +58,7 @@ const ScoreStackNavigator = () => {
 const AppBottomTabs = createBottomTabNavigator();
 const App = () => {
   return (
+   <GameContextProvider>
     <CountriesContextProvider>
      <StatusBar translucent backgroundColor="transparent" style="dark" />
      <NavigationContainer>
@@ -80,6 +84,7 @@ const App = () => {
       </AppBottomTabs.Navigator> 
      </NavigationContainer>
     </CountriesContextProvider>
+   </GameContextProvider>
   );
 };
 

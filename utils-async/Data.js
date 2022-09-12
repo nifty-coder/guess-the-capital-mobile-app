@@ -43,7 +43,7 @@ export const useFetchRandomCountries = () => {
     let firstIndex = -1;
 
     while(setOfCountries.size < 4 && response) {
-      let randomIndex = Math.floor(Math.random() * response.length + 1);
+      let randomIndex = Math.floor(Math.random() * response.length);
       if(
         ("capital" in response[randomIndex]) === false 
         || response[randomIndex].population === 0 

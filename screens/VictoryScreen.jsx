@@ -42,7 +42,6 @@ function VictoryScreen({ navigation, route }) {
   return (
     <View style={styles.container}>
       <Image source={{ uri: uri }} style={styles.image} />
-      <Text style={styles.text}>Great job, {playerName}!</Text>
       <View style={styles.buttonContainer}>
         <CustomButton 
         fontSize={16}
@@ -78,20 +77,16 @@ const styles = StyleSheet.create({
     width: 300,
     height: 300
   },
-  text: {
-    fontSize: 20
-  },
   buttonContainer: {
-    flexDirection: 'row'
+    flexDirection: 'row',
+    marginTop: 16
   },
   playAgainButton: {
     width: 200,
-    marginTop: 4,
     marginRight: 5
   },
   scoreSummaryButton: {
     width: 150,
-    marginTop: 4,
     marginLeft: 7
   }
 });

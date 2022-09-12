@@ -1,15 +1,16 @@
-import { useEffect, useLayoutEffect, useState } from 'react';
+import { useContext, useEffect, useLayoutEffect, useState } from 'react';
 import { Alert, StyleSheet, Pressable, Text, View, BackHandler } from 'react-native';
 import { Ionicons, AntDesign } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { GameContext } from '../utils-async/Context';
 import { useFetchRandomCountries, fetchAnswers } from '../utils-async/Data';
 import Colors from '../constants/Colors';
 import CountryCard from '../components/CountryCard';
 import Answers from '../components/Answers';
 
 const HomeGameScreen = ({ navigation }) => {
+  const { playerName, updatePlayerName } = useContext(GameContext);
   const { fetchRandomCountries } = useFetchRandomCountries();
-  const [playerName, setPlayerName] = useState('');
   const [randomizedCountry, setRandomizedCountry] = useState({});
   const [randomizedAnswers, setRandomizedAnswers] = useState([]);
   const [disabled, setDisabled] = useState(false);
@@ -54,16 +55,11 @@ const HomeGameScreen = ({ navigation }) => {
   };
 
   useEffect(() => {
-    (async () => {
-      let player = await AsyncStorage.getItem("player");
-      setPlayerName(player);  
-    })();
-
     const unsubscribe = (() => {    
-      const subscription = navigation.addListener('focus', async () => {  
+      const subscription = navigation.addListener('focus', async () => {
         await loadData();
-      });
-  
+        Alert.alert("Started a new game.", "All the best!", [{ text: 'Okay' }]);  
+      }); 
       return subscription;
     })();
      
@@ -89,6 +85,7 @@ const HomeGameScreen = ({ navigation }) => {
           {
             text: 'Yes',
             onPress: async () => {
+              updatePlayerName('');
               const keys = ['player', 'numAttempts', 'numGames', 'gameHistory'];
               await AsyncStorage.multiRemove(keys, (err) => {
                 if(!err) {
@@ -156,7 +153,7 @@ const HomeGameScreen = ({ navigation }) => {
         navigation.navigate(
           "GameVictory", 
           { 
-            participationType: correctAnsCt === 10 ? false : true 
+            participationType: correctAnsCt >= 8 ? false : true 
           }
         );
         setNumberOfAttempts(0);  
@@ -195,7 +192,10 @@ const HomeGameScreen = ({ navigation }) => {
       setDisabled(true);
       setIsCorrect(false);
 
-      setWonText(`Oops, it is wrong! Correct answer is ${correctAnswer}.`);
+      setWonText(
+        `Oops, your answer, ${answer}, is wrong! 
+        The correct answer is ${correctAnswer}.`
+      );
       await checkIfGameDone(numberOfAttempts);
     }
   };
@@ -256,7 +256,7 @@ const styles = StyleSheet.create({
     fontSize: 15, 
     textAlign: "center",
     marginTop: -15,   
-    marginBottom: 4 
+    marginBottom: 3 
   },
   questionText: { 
     marginTop: 10,
