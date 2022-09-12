@@ -110,7 +110,7 @@ const HomeGameScreen = ({ navigation }) => {
           style={{ alignSelf: 'center' }} 
           name="close-circle" 
           size={36} 
-          color="black" 
+          color={Colors.white}
           />
           <Text style={{ textAlign: 'center' }}>Exit App</Text>
         </Pressable>
@@ -123,7 +123,7 @@ const HomeGameScreen = ({ navigation }) => {
           style={{ alignSelf: 'center' }} 
           name="deleteuser" 
           size={36} 
-          color="black" 
+          color={Colors.white}  
           />
           <Text style={{ textAlign: 'center' }}>{playerName}</Text>
         </Pressable>
