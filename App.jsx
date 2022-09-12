@@ -9,7 +9,6 @@ import {
   BottomTabsNavigationScreenOptions, 
   NativeStackNavigationScreenOptions 
 } from './constants/NavigationScreenOptions';
-import Colors from './constants/Colors';
 import HomeIntroScreen from './screens/HomeIntroScreen';
 import HomeGameScreen from './screens/HomeGameScreen';
 import ScoreScreen from './screens/ScoreScreen';
@@ -67,9 +66,8 @@ const App = () => {
         name="Home" 
         component={GameStackNavigator}
         options={{
-          headerShown: false,
-          tabBarActiveTintColor: Colors.appTheme.darkblue,
-          unmountOnBlur: true
+          unmountOnBlur: true,
+          headerShown: false
         }} />
 
         <AppBottomTabs.Screen 
@@ -78,7 +76,6 @@ const App = () => {
         options={{
           unmountOnBlur: true,
           title: 'Score Summary',
-          tabBarActiveTintColor: Colors.appTheme.darkgreen,
           headerShown: false
         }} />
       </AppBottomTabs.Navigator> 

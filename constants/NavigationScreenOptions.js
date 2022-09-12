@@ -4,17 +4,22 @@ import Colors from '../constants/Colors';
 const defaultStyles = {
     headerTitleAlign: 'center',
     headerStyle: {
-      backgroundColor: Colors.appTheme.orange
+      backgroundColor: Colors.appTheme.darkgreen,
+    },
+    headerTintColor: Colors.white,
+    headerTitleStyle: {
+      fontSize: 28
     }
 };
 
 const BottomTabsNavigationScreenOptions = ({ route }) => ({
     ...defaultStyles,
     tabBarStyle: {
-      backgroundColor: Colors.appTheme.orange
+      backgroundColor: Colors.appTheme.darkgreen
     },
     tabBarLabelStyle: { fontSize: 14 },
-    tabBarInactiveTintColor: Colors.black,
+    tabBarInactiveTintColor: Colors.white,
+    tabBarActiveTintColor: Colors.appTheme.darkorange,
     tabBarIcon: ({ focused, color }) => {
       let iconName;
   
