@@ -16,7 +16,7 @@ function VictoryScreen({ navigation, route }) {
        <Pressable 
        android_ripple={{ color: '#fff' }} 
        onPress={() => navigation.navigate("HomeGame", { playerName: playerName })}>
-        <Ionicons name="arrow-back" size={24} />
+        <Ionicons name="arrow-back" size={24} color={Colors.white} />
        </Pressable> 
       )
     });
