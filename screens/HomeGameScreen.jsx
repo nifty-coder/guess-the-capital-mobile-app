@@ -35,8 +35,9 @@ const HomeGameScreen = ({ navigation }) => {
     
     const answersResult = fetchAnswers(countriesResult);
     setRandomizedAnswers(answersResult);  
-
+    console.log('inside load data' + playerName)
     setNumberOfAttempts((prevNumber) => { 
+      console.log(prevNumber);
       switch(isQuestionAnswered) {
         case true:
          return prevNumber + 1;
@@ -54,24 +55,22 @@ const HomeGameScreen = ({ navigation }) => {
     setWonText('');
   };
 
-  useEffect(() => {
-    const unsubscribe = (() => {    
-      const subscription = navigation.addListener('focus', async () => {
-        await loadData();
-        Alert.alert("Started a new game.", "All the best!", [{ text: 'Okay' }]);  
-      }); 
-      return subscription;
-    })();
-     
-   return () => {
-    unsubscribe();
-    setRandomizedCountry({});
-    setRandomizedAnswers([]);
-    setWonText('');
-   };
-  }, [navigation]);
+  useEffect(() => {  
+   (async () => {
+    if (playerName) {
+      setRandomizedCountry({});
+      setRandomizedAnswers([]);
+      setNumberOfAttempts(0);
+      console.log('inside use effect' + playerName);
+      updatePlayerName(playerName);
+      setWonText('');
+      await loadData();
+      Alert.alert("Started a new game.", "All the best!", [{ text: 'Okay' }]);
+    }
+   })();
+  }, [navigation, playerName]);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     const exitApp = async () => {
       BackHandler.exitApp();
     };
@@ -86,12 +85,13 @@ const HomeGameScreen = ({ navigation }) => {
             text: 'Yes',
             onPress: async () => {
               updatePlayerName('');
+              console.log(playerName);
               const keys = ['player', 'numAttempts', 'numGames', 'gameHistory'];
               await AsyncStorage.multiRemove(keys, (err) => {
                 if(!err) {
-                  setTimeout(() => {
+                  // setTimeout(() => {
                   navigation.navigate("Home", { screen: "HomeIntro", initial: true });
-                  }, 1000);    
+          //        }, 1000);    
                 } else {
                   Alert.alert("Something went wrong!", "Please try again.", [{ text: 'Okay' }]);
                 }
@@ -129,7 +129,7 @@ const HomeGameScreen = ({ navigation }) => {
         </Pressable>
       )
     });
-  }, [navigation]);
+  }, [playerName]);
   
   const checkIfGameDone = async (numAtts) => {
     if (numAtts % 10 === 0) {

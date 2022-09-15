@@ -4,7 +4,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { CountriesContextProvider, GameContext, GameContextProvider } from './utils-async/Context';
+import { CountriesContextProvider, GameContextProvider } from './utils-async/Context';
 import { 
   BottomTabsNavigationScreenOptions, 
   NativeStackNavigationScreenOptions 
@@ -16,7 +16,6 @@ import VictoryScreen from './screens/VictoryScreen';
 
 const NativeStack = createNativeStackNavigator();
 const GameStackNavigator = () => {
-  const { enteredPlayerName } = useContext(GameContext);
   const [asyncStoragePlayerName, setAsyncStoragePlayerName] = useState();  
 
   useEffect(() => {
@@ -31,7 +30,7 @@ const GameStackNavigator = () => {
     <NativeStack.Navigator 
     screenOptions={NativeStackNavigationScreenOptions}
     initialRouteName={
-      (!enteredPlayerName && !asyncStoragePlayerName) ? "HomeIntro" : "HomeGame"
+      (!asyncStoragePlayerName) ? "HomeIntro" : "HomeGame"
     }>
       <NativeStack.Screen 
       name="HomeIntro" 
@@ -59,7 +58,7 @@ const App = () => {
   return (
    <GameContextProvider>
     <CountriesContextProvider>
-     <StatusBar translucent backgroundColor="transparent" style="dark" />
+     <StatusBar translucent backgroundColor="transparent" style="light" />
      <NavigationContainer>
       <AppBottomTabs.Navigator screenOptions={BottomTabsNavigationScreenOptions}>
         <AppBottomTabs.Screen 

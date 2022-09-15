@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { Dimensions, Image, StyleSheet, Text, TextInput, View, PixelRatio } from 'react-native';
 import BadWordsList from 'badwords-list';
 import BadWordsFilter from 'bad-words';
@@ -24,7 +24,8 @@ const normalize = (size) => {
 
 const HomeIntroScreen = ({ navigation }) => {
   const worldMapURL = 'https://tinyurl.com/sk-app-world-map';
-  const { updatePlayerName } = useContext(GameContext);
+  const { playerName, updatePlayerName } = useContext(GameContext);
+  console.log('inside Home Intro' + playerName);
   const [player, setPlayer] = useState('');
   let EnglishBadWordsFilter = new BadWordsFilter(BadWordsList.array);
   let playerFitOrNotForSubmission = (
@@ -37,9 +38,15 @@ const HomeIntroScreen = ({ navigation }) => {
   const playGameHandler = async () => {
    await AsyncStorage.setItem("player", player);
    updatePlayerName(player);
-   navigation.navigate("Home", { screen: "HomeGame", initial: true });
-   setPlayer('');
+   navigation.navigate("Home", { screen: "HomeGame", initial: true });   
   };
+
+  useEffect(() => {
+    setPlayer(playerName);
+    return () => {
+      setPlayer('');
+    };
+  }, [playerName]);
 
   return (
     <View style={styles.container}>

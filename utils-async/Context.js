@@ -8,7 +8,11 @@ export const GameContextProvider = (props) => {
   useEffect(() => {
     (async () => {
       let player = await AsyncStorage.getItem("player");
-      setPlayerName(player);  
+      if(!player) {
+        setPlayerName('');
+      } else {
+        setPlayerName(player);  
+      }
     })();
   });
 
