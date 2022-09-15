@@ -50,7 +50,7 @@ function ScoreScreen({ navigation }) {
            size={32} 
            color={Colors.white}
            />
-          <Text style={{ textAlign: 'center' }}>Clear Games</Text>
+          <Text style={{ textAlign: 'center', color: Colors.white }}>Clear Games</Text>
           </Pressable> 
         )
       });

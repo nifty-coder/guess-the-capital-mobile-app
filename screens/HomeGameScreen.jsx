@@ -112,7 +112,7 @@ const HomeGameScreen = ({ navigation }) => {
           size={36} 
           color={Colors.white}
           />
-          <Text style={{ textAlign: 'center' }}>Exit App</Text>
+          <Text style={{ textAlign: 'center', color: Colors.white }}>Exit App</Text>
         </Pressable>
       ),
       headerRight: () => (
@@ -125,7 +125,7 @@ const HomeGameScreen = ({ navigation }) => {
           size={36} 
           color={Colors.white}  
           />
-          <Text style={{ textAlign: 'center' }}>{playerName}</Text>
+          <Text style={{ textAlign: 'center', color: Colors.white }}>{playerName}</Text>
         </Pressable>
       )
     });
