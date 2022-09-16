@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "Quiz - Capital Cities of the World",
-    "slug": "quiz-capitals-game",
+    "slug": "QuizCapitalsGame",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -17,6 +17,14 @@
     },
     "assetBundlePatterns": [
       "**/*"
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "c959cd9c-888c-477c-88ae-18ef86499598"
+      }
+    },
+    "android": {
+      "package": "com.niftycoder.quizcapitalsgame"
+    }
   }
 }
