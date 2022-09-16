@@ -25,7 +25,6 @@ const normalize = (size) => {
 const HomeIntroScreen = ({ navigation }) => {
   const worldMapURL = 'https://tinyurl.com/sk-app-world-map';
   const { playerName, updatePlayerName } = useContext(GameContext);
-  console.log('inside Home Intro' + playerName);
   const [player, setPlayer] = useState('');
   let EnglishBadWordsFilter = new BadWordsFilter(BadWordsList.array);
   let playerFitOrNotForSubmission = (
@@ -43,6 +42,7 @@ const HomeIntroScreen = ({ navigation }) => {
 
   useEffect(() => {
     setPlayer(playerName);
+    
     return () => {
       setPlayer('');
     };

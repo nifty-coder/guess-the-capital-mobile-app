@@ -35,9 +35,8 @@ const HomeGameScreen = ({ navigation }) => {
     
     const answersResult = fetchAnswers(countriesResult);
     setRandomizedAnswers(answersResult);  
-    console.log('inside load data' + playerName)
+
     setNumberOfAttempts((prevNumber) => { 
-      console.log(prevNumber);
       switch(isQuestionAnswered) {
         case true:
          return prevNumber + 1;
@@ -61,7 +60,6 @@ const HomeGameScreen = ({ navigation }) => {
       setRandomizedCountry({});
       setRandomizedAnswers([]);
       setNumberOfAttempts(0);
-      console.log('inside use effect' + playerName);
       updatePlayerName(playerName);
       setWonText('');
       await loadData();
@@ -85,13 +83,10 @@ const HomeGameScreen = ({ navigation }) => {
             text: 'Yes',
             onPress: async () => {
               updatePlayerName('');
-              console.log(playerName);
               const keys = ['player', 'numAttempts', 'numGames', 'gameHistory'];
               await AsyncStorage.multiRemove(keys, (err) => {
                 if(!err) {
-                  // setTimeout(() => {
                   navigation.navigate("Home", { screen: "HomeIntro", initial: true });
-          //        }, 1000);    
                 } else {
                   Alert.alert("Something went wrong!", "Please try again.", [{ text: 'Okay' }]);
                 }
@@ -138,7 +133,7 @@ const HomeGameScreen = ({ navigation }) => {
           return JSON.parse(res);
         } else return [];
       });
-    
+     
       let gameData = {
         gameNum: numberOfGames,
         correctAns: correctAnsCt,
