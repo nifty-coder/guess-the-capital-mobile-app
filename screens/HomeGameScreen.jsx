@@ -18,7 +18,7 @@ const HomeGameScreen = ({ navigation }) => {
   const [isQuestionAnswered, setIsQuestionAnswered] = useState(false);
   const [wonText, setWonText] = useState('');
   const [numberOfAttempts, setNumberOfAttempts] = useState(0);
-  const [numberOfGames, setNumberOfGames] = useState();
+  const [numberOfGames, setNumberOfGames] = useState(0);
   const [numberOfCorrectAnswers, setNumberOfCorrectAnswers] = useState(0);
   let correctAnsCt = numberOfCorrectAnswers;
   
@@ -26,10 +26,9 @@ const HomeGameScreen = ({ navigation }) => {
     let numGames = await AsyncStorage.getItem("numGames").then((res) => {
       if (res) {
         return +res;
-      } else return 1;
+      } else return 0;
     });    
     setNumberOfGames(numGames);
-    
     const countriesResult = fetchRandomCountries();
     setRandomizedCountry(countriesResult[0]);
     
@@ -86,7 +85,7 @@ const HomeGameScreen = ({ navigation }) => {
               const keys = ['player', 'numAttempts', 'numGames', 'gameHistory'];
               await AsyncStorage.multiRemove(keys, (err) => {
                 if(!err) {
-                  navigation.navigate("Home", { screen: "HomeIntro", initial: true });
+                  navigation.replace("HomeIntro");
                 } else {
                   Alert.alert("Something went wrong!", "Please try again.", [{ text: 'Okay' }]);
                 }
@@ -132,10 +131,10 @@ const HomeGameScreen = ({ navigation }) => {
         if(res && res !== 1) {
           return JSON.parse(res);
         } else return [];
-      });
+      }); 
      
       let gameData = {
-        gameNum: numberOfGames,
+        gameNum: numberOfGames + 1,
         correctAns: correctAnsCt,
         wrongAns: correctAnsCt === 10 ? 0 : 10 - correctAnsCt
       };

@@ -14,6 +14,7 @@ const defaultStyles = {
 
 const BottomTabsNavigationScreenOptions = ({ route }) => ({
     ...defaultStyles,
+    unmountOnBlur: true,
     tabBarStyle: {
       backgroundColor: Colors.appTheme.darkgreen
     },

@@ -31,7 +31,7 @@ function ScoreScreen({ navigation }) {
           {
             text: 'Yes',
             onPress: async () => {
-              await AsyncStorage.removeItem("gameHistory"); 
+              await AsyncStorage.multiRemove(["gameHistory", "numGames"]); 
               setGameHistory(null);        
             }
           }

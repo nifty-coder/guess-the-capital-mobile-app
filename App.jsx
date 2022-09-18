@@ -65,7 +65,6 @@ const App = () => {
         name="Home" 
         component={GameStackNavigator}
         options={{
-          unmountOnBlur: true,
           headerShown: false
         }} />
 
@@ -73,7 +72,6 @@ const App = () => {
         name="Score" 
         component={ScoreStackNavigator}
         options={{
-          unmountOnBlur: true,
           title: 'Score Summary',
           headerShown: false
         }} />
